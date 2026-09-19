@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<style>
+body{width:360px;margin:0;font:13px/1.6 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:#181818;background:#F5F6F8}
+header{background:#15181D;color:#fff;padding:12px 14px}
+header b{font-size:15px}header div{opacity:.85;font-size:12px}
+main{padding:12px;display:flex;flex-direction:column;gap:10px}
+.card{background:#fff;border:1px solid #E7E7E7;border-radius:10px;padding:12px}
+h3{margin:0 0 6px;font-size:13.5px}
+button{width:100%;border:1px solid #DCDCDC;background:#fff;border-radius:8px;padding:8px;font:inherit;cursor:pointer}
+button.pri{background:#15181D;border-color:#15181D;color:#fff;font-weight:600}
+button+button{margin-top:6px}
+input,textarea{width:100%;box-sizing:border-box;border:1px solid #DCDCDC;border-radius:6px;padding:6px 8px;font:inherit;margin:3px 0 6px}
+textarea{height:110px;resize:vertical}
+label{font-size:12px;color:#767676}
+.note{font-size:12px;color:#767676}
+.ok{color:#2BA471}.warn{color:#E37318}
+</style></head>
+<body>
+<header><b>Offer 助手</b><div>自动刷岗位 · 自动填写网申 · 提交由你确认</div></header>
+<main>
+  <div class="card"><h3>档案状态</h3><div id="status" class="note">读取中…</div></div>
+  <div class="card">
+    <h3>抓取当前岗位</h3>
+    <div class="note">在岗位详情页点击；也可以先选中 JD 文字再点。</div>
+    <button class="pri" id="grab">抓取 JD</button>
+    <div id="job" hidden>
+      <label>公司</label><input id="co"><label>岗位</label><input id="role"><label>城市</label><input id="city">
+      <label>JD</label><textarea id="jd"></textarea>
+      <button class="pri" id="saveJob">加入投递看板</button>
+    </div>
+    <div id="jobMsg" class="note"></div>
+  </div>
+  <div class="card">
+    <h3>自动填写网申</h3>
+    <div class="note">在网申表单页点击，只会填空着的字段，并用蓝框标出。<b>检查无误后请你自己点提交。</b></div>
+    <button class="pri" id="fill">填写当前页面</button>
+    <div id="fillMsg" class="note"></div>
+  </div>
+  <div class="card"><h3>自动投递</h3><div class="note">自动刷岗位、生成简历、打开网申并填写，都在平台的「自动投递」页里设置和启动。</div><button id="open">打开Offer</button></div>
+</main>
+<script src="page-tools.js"></script>
+<script src="popup.js"></script>
+</body></html>

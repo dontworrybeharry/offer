@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Offer 助手",
+  "version": "2.0.0",
+  "description": "配合Offer自动刷岗位：后台打开招聘网站读取岗位、按你的档案自动填写网申。投递 / 提交按钮始终由你本人点击。",
+  "action": { "default_popup": "popup.html", "default_title": "Offer 助手" },
+  "icons": { "128": "icon.png" },
+  "background": { "service_worker": "background.js" },
+  "permissions": ["storage", "activeTab", "scripting", "tabs", "tabGroups", "alarms", "notifications", "webNavigation"],
+  "host_permissions": ["<all_urls>"],
+  "content_scripts": [{
+    "matches": ["file:///*", "https://*.github.io/*", "http://localhost/*", "http://127.0.0.1/*"],
+    "js": ["bridge.js"],
+    "run_at": "document_idle"
+  }]
+}

@@ -1,0 +1,16 @@
+# 隐私检查的本地词表示例
+#
+# tools/check.py 会按格式（手机号、邮箱、本机绝对路径）扫描仓库，
+# 但姓名、学校、雇主这类词没有通用格式，只能由你自己列出来。
+#
+# 用法：复制这个文件为 tools/privacy-words.txt，一行一个词。
+# 那个文件已经写进 .gitignore，不会被提交，所以检查脚本本身不会泄漏你的信息。
+#
+#   cp tools/privacy-words.example.txt tools/privacy-words.txt
+#
+# 下面是占位示例，换成你自己的：
+
+张三
+ZhangSan
+某某大学
+某某公司

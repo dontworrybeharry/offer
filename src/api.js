@@ -42,8 +42,12 @@ function qzApiApply(state,notify){
     if(typeof load==="function") load(); else S=state;
     const cur=(document.querySelector(".view.on")||{id:"v-dash"}).id.slice(2), y=window.scrollY;
     if(typeof go==="function"){ go(cur); setTimeout(()=>window.scrollTo(0,y),0); }
-    if(JSON.stringify(S)!==before) qzApiSchedule();   // 迁移后有变化，回写后端
-    if(notify) toast("已同步其他窗口的更新");
+    /* 载入远端数据后不自动回推：多个窗口版本不一致时会互相改写、来回推送。
+       只有本机迁移确实改了数据、并且这一轮还没回推过时，才推一次。 */
+    if(JSON.stringify(S)!==before&&QZAPI.pushedFor!==QZAPI.version&&(QZAPI.applies||0)<3){ QZAPI.pushedFor=QZAPI.version; qzApiSchedule(); }
+    QZAPI.applies=(QZAPI.applies||0)+1; clearTimeout(QZAPI.applyTimer); QZAPI.applyTimer=setTimeout(()=>{ QZAPI.applies=0; QZAPI.warned=false; },20000);
+    if(QZAPI.applies>=3&&!QZAPI.warned){ QZAPI.warned=true; QZAPI.err="多个 Offer 窗口在互相覆盖：只留一个窗口，其余关掉后刷新"; }
+    if(notify) qzApiStatus();   // 静默刷新：只更新侧栏状态，不再弹提示
   }finally{ QZAPI.applying=false; }
 }
 
@@ -58,8 +62,8 @@ async function qzApiPush(force){
     if(r.status===409){
       const s=await (await fetch(qzApiUrl("state"),{cache:"no-store"})).json();
       QZAPI.version=s.version; if(s.state) qzApiApply(s.state,false);
-      toast("另一个窗口刚改过数据，已载入最新版本；你刚才这一步没有保存，请再做一次");
-    }else if(r.ok){ QZAPI.version=(await r.json()).version; QZAPI.err=""; }
+      QZAPI.err="另一个窗口刚改过，已载入最新版本"; qzApiStatus(); setTimeout(()=>{ if(QZAPI.err.startsWith("另一个窗口")){ QZAPI.err=""; qzApiStatus(); } },5000);
+    }else if(r.ok){ QZAPI.version=(await r.json()).version; QZAPI.err=""; QZAPI.at=new Date().toLocaleTimeString("zh-CN",{hour:"2-digit",minute:"2-digit"}); }
     else QZAPI.err="同步失败（"+r.status+"）";
   }catch(e){ QZAPI.err="连不上本机后端"; }
   finally{
@@ -86,7 +90,7 @@ function qzApiStatus(){
   let el=document.getElementById("qzApi");
   if(!el){ el=document.createElement("div"); el.id="qzApi"; nr.prepend(el); }
   el.className="qz-ext"+(QZAPI.err?"":" on");
-  el.innerHTML=`<i></i>${QZAPI.err?esc(QZAPI.err):"本机后端 · 已同步"}`;
+  el.innerHTML=`<i></i>${QZAPI.err?esc(QZAPI.err):"本机后端 · 已同步"+(QZAPI.at?" "+QZAPI.at:"")}`;
   el.title=QZAPI.err?"":"数据保存在本机数据库，所有浏览器共用；其他窗口的修改会实时出现";
 }
 

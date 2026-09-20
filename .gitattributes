@@ -1,0 +1,4 @@
+# index.html 是 tools/build.py 从 src/ 生成的单文件产物：不计入语言统计
+index.html linguist-generated=true
+# 截图与文档
+docs/** linguist-documentation

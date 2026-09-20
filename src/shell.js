@@ -203,7 +203,17 @@ function qzBrand(){
 }
 function qzShell(){
   qzBrand(); qzTop(); qzNav();
-  if(!window.__qzGo){ window.__qzGo=go; window.go=function(v){ const r=window.__qzGo(v); qzSync(); return r; }; }
+  /* 页面切换写进浏览历史：浏览器的后退 / 前进、触控板左右滑都能用 */
+  if(!window.__qzGo){
+    window.__qzGo=go;
+    window.go=function(v,fromHistory){
+      const r=window.__qzGo(v); qzSync();
+      try{ if(!fromHistory&&document.getElementById("v-"+v)&&(history.state||{}).v!==v) history.pushState({v},"","#"+v); }catch(e){}
+      return r;
+    };
+    try{ const cur=qzCur(); history.replaceState({v:cur},"","#"+cur); }catch(e){}
+    window.addEventListener("popstate",e=>{ const v=(e.state&&e.state.v)||(location.hash||"").replace(/^#/,""); if(v&&document.getElementById("v-"+v)) window.go(v,true); });
+  }
   window.buildNav=qzNav;
   qzSync();
   window.addEventListener("message",e=>{ const d=e.data||{}; if(d.source==="qzzt-ext"&&d.type==="HELLO") setTimeout(()=>{ qzExtState(); qzBadges(); },50); });

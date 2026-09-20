@@ -1375,6 +1375,34 @@ tr.is-on td{background:#FBFCFD}
 #bankList .qa-meta{display:none}
 .ap-empty p{margin:0 0 12px;color:var(--t3);font-size:13.5px}
 
+/* ---------- 面试复盘 ---------- */
+.rvc{padding:18px 0;border-bottom:1px solid var(--bd)}
+.rvc-h{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.rvc-t{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.rvc-t b{font-size:16px;font-weight:600}
+.rvc-t span{font-size:14px;color:var(--t2)}
+.rvc-f{margin-top:4px;font-size:12.5px;color:var(--t3)}
+.rvc-r{display:flex;align-items:center;gap:10px}
+.rvc-badge{font-size:12.5px;font-weight:600;padding:2px 10px;border-radius:6px;background:#F1F3F6;color:var(--t2)}
+.rvc-badge.ok{background:#E7F4EC;color:#177245}
+.rvc-badge.bad{background:#FBEAE8;color:#B42318}
+.rvc-avg{display:inline-flex;align-items:baseline;gap:1px;color:var(--t1)}
+.rvc-avg b{font-size:17px;font-weight:600}
+.rvc-avg i{font-style:normal;font-size:12px;color:var(--t3)}
+.rvc-dims{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:12px}
+.rvc-sum{margin:12px 0 0;font-size:13.5px;line-height:1.8;color:var(--t2);max-width:80ch}
+.rvc-fails{margin-top:10px}
+.rvc-next{margin:10px 0 0;font-size:13.5px;line-height:1.75;color:var(--t1);max-width:80ch}
+.rvc-next b{display:inline-block;margin-right:8px;font-size:12px;color:#8F5200}
+.rvc-more{margin-top:12px}
+.rvc-more>summary{cursor:pointer;font-size:13px;color:var(--t3);list-style:none}
+.rvc-more>summary::-webkit-details-marker{display:none}
+.rvc-more>summary::before{content:"+";display:inline-block;width:14px;color:var(--t3)}
+.rvc-more[open]>summary::before{content:"–"}
+.rq-fix{margin-top:5px;color:#8F5200;font-size:13px}
+.rvc-act{display:flex;gap:8px;margin-top:12px}
+#reviewList .card{border:0;padding:0}
+
 /*@/QZ:shell.css*/
 /*@QZ:share/interview.css*/
 /* 面试模块（通用版）：只补通用版缺的基础样式，外观规则在 shell.css */
@@ -3994,7 +4022,7 @@ window.postMessage({source:"qzzt-page",type:"PING"},"*");
 /*@/QZ:agent.js*//*@QZ:sites.js*/
 /* 来源库：各公司校招官网。auto=true 表示 2026-09-18 实测能自动收集岗位并读出 JD。线上版本 sites.json 会自动检查更新 */
 const QZ_SITES_VER="2026-09-19";
-const QZ_SITES=[{"co": "腾讯", "cat": "互联网大厂", "url": "https://join.qq.com/post.html?query=p_1", "auto": false, "note": "用本机后端打开 Offer 时，直接读取腾讯招聘接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "腾讯招聘"}, {"co": "字节跳动", "cat": "互联网大厂", "url": "https://jobs.bytedance.com/campus/position", "auto": true}, {"co": "阿里巴巴（含阿里国际、阿里云）", "cat": "互联网大厂", "url": "https://campus-talent.alibaba.com/campus/position?batchId=100000760001", "auto": true}, {"co": "美团", "cat": "互联网大厂", "url": "https://zhaopin.meituan.com/web/position?hiringType=2_1", "auto": true}, {"co": "京东", "cat": "互联网大厂", "url": "https://campus.jd.com/#/jobs", "auto": true}, {"co": "百度", "cat": "互联网大厂", "url": "https://talent.baidu.com/jobs/list?recruitType=GRADUATE", "auto": true}, {"co": "快手", "cat": "互联网大厂", "url": "https://campus.kuaishou.cn/#/campus/jobs", "auto": false, "note": "用本机后端打开 Offer 时，直接读取快手校招接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "快手校招"}, {"co": "网易", "cat": "互联网大厂", "url": "https://campus.163.com/app/job/position", "auto": false, "note": "用本机后端打开 Offer 时，直接读取网易校招接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "网易校招"}, {"co": "小红书", "cat": "互联网大厂", "url": "https://job.xiaohongshu.com/campus/position", "auto": true}, {"co": "哔哩哔哩", "cat": "互联网大厂", "url": "https://jobs.bilibili.com/campus/positions", "auto": true}, {"co": "滴滴", "cat": "互联网大厂", "url": "https://campus.didiglobal.com/campus_apply/didiglobal/96064#/jobs", "auto": true}, {"co": "小米", "cat": "互联网大厂", "url": "https://xiaomi.jobs.f.mioffice.cn/campus/", "auto": false, "note": "用本机后端打开 Offer 时，直接读取飞书招聘接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "飞书招聘"}, {"co": "华为", "cat": "互联网大厂", "url": "https://career.huawei.com/reccampportal/portal5/campus-recruitment.html", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "荣耀", "cat": "互联网大厂", "url": "https://career.honor.com/SU61b9b9992f9d24431f5050a5/pb/school.html", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "拼多多 / Temu", "cat": "出海", "url": "https://careers.pddglobalhr.com/campus/grad", "auto": true}, {"co": "携程", "cat": "出海", "url": "https://careers.trip.com/#/campus/job", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "OPPO", "cat": "出海", "url": "https://careers.oppo.com/university/oppo/campus/post", "auto": true}, {"co": "vivo", "cat": "出海", "url": "https://hr-campus.vivo.com/campus", "auto": false, "note": "用本机后端打开 Offer 时，直接读取北森接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "北森"}, {"co": "SHEIN", "cat": "出海", "url": "https://careers.shein.com/Students-&-Graduates", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "安克创新", "cat": "出海", "url": "https://anker-in.jobs.feishu.cn/campushirecn/", "auto": true, "direct": "飞书招聘"}, {"co": "TikTok", "cat": "出海", "url": "https://lifeattiktok.com/search?recruitment_id_list=202", "auto": false, "note": "用本机后端打开 Offer 时，直接读取TikTok 招聘接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "TikTok 招聘"}, {"co": "传音控股", "cat": "出海", "url": "https://transsion.zhiye.com/campus/jobs", "auto": true, "direct": "北森"}, {"co": "名创优品", "cat": "出海", "url": "https://miniso.zhiye.com/campus/jobs", "auto": true, "direct": "北森"}, {"co": "泡泡玛特", "cat": "出海", "url": "https://popmart.zhiye.com/campus/jobs", "auto": false, "note": "用本机后端打开 Offer 时，直接读取北森接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "北森"}, {"co": "米哈游", "cat": "出海", "url": "https://jobs.mihoyo.com/#/campus/position", "auto": false, "note": "用本机后端打开 Offer 时，直接读取米哈游招聘接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "米哈游招聘"}, {"co": "莉莉丝", "cat": "出海", "url": "https://lilithgames.jobs.feishu.cn/campus", "auto": true, "direct": "飞书招聘"}, {"co": "大疆", "cat": "出海", "url": "https://apply.careers.dji.com/campus-recruitment/dji/143359?locale=zh-CN#/jobs", "auto": true}, {"co": "比亚迪", "cat": "出海", "url": "https://job.byd.com/portal/pc/", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "蚂蚁国际", "cat": "出海", "url": "https://www.ant-intl.com/cn/job-search-campus/", "auto": false, "note": "用本机后端打开 Offer 时，直接读取蚂蚁招聘接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "蚂蚁招聘"}, {"co": "月之暗面", "cat": "AI 与机器人", "url": "https://moonshot.jobs.feishu.cn/campus", "auto": false, "note": "用本机后端打开 Offer 时，直接读取飞书招聘接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "飞书招聘"}, {"co": "智谱", "cat": "AI 与机器人", "url": "https://zhipu-ai.jobs.feishu.cn/zhipucampus/position/list", "auto": true, "direct": "飞书招聘"}, {"co": "MiniMax", "cat": "AI 与机器人", "url": "https://vrfi1sk8a0.jobs.feishu.cn/379481", "auto": true, "direct": "飞书招聘"}, {"co": "阶跃星辰", "cat": "AI 与机器人", "url": "https://app.mokahr.com/campus-recruitment/step/141903", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "DeepSeek", "cat": "AI 与机器人", "url": "https://app.mokahr.com/campus_apply/high-flyer/4605#/jobs", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "商汤科技", "cat": "AI 与机器人", "url": "https://hr.sensetime.com/", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "宇树科技", "cat": "AI 与机器人", "url": "https://unitree.zhiye.com/", "auto": false, "note": "用本机后端打开 Offer 时，直接读取北森接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "北森"}, {"co": "得物", "cat": "新消费", "url": "https://campus.dewu.com/578078", "auto": false, "note": "用本机后端打开 Offer 时，直接读取飞书招聘接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "飞书招聘"}, {"co": "蔚来", "cat": "新能源", "url": "https://nio.jobs.feishu.cn/campus", "auto": true, "direct": "飞书招聘"}, {"co": "理想汽车", "cat": "新能源", "url": "https://li.jobs.feishu.cn/", "auto": true, "direct": "飞书招聘"}, {"co": "小鹏汽车", "cat": "新能源", "url": "https://xiaopeng.jobs.feishu.cn/campus", "auto": false, "note": "用本机后端打开 Offer 时，直接读取飞书招聘接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "飞书招聘"}, {"co": "宁德时代", "cat": "新能源", "url": "https://app.mokahr.com/campus-recruitment/catlhr/148948#/jobs", "auto": true}, {"co": "蚂蚁集团", "cat": "金融", "url": "https://talent.antgroup.com/campus-full-list", "auto": false, "note": "用本机后端打开 Offer 时，直接读取蚂蚁招聘接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "蚂蚁招聘"}, {"co": "招商银行", "cat": "金融", "url": "https://career.cmbchina.com/", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "微众银行", "cat": "金融", "url": "https://campus.webank.com/campus-recruitment/webankhr/18005", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "中国平安", "cat": "金融", "url": "https://campus.pingan.com/", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "中金公司", "cat": "金融", "url": "https://cicc.zhiye.com/campus", "auto": false, "note": "用本机后端打开 Offer 时，直接读取北森接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "北森"}, {"co": "中信证券", "cat": "金融", "url": "https://careers.citics.com/", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "华泰证券", "cat": "金融", "url": "https://wecruit.hotjob.cn/SU6419745cbef57c635fe10142/pb/school.html?projectCode=107103&channelId=61d886b0bef57c659fd91ea8", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "欧莱雅", "cat": "快消外企", "url": "https://careers.loreal.com/zh_CN/content/Students", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "宝洁", "cat": "快消外企", "url": "https://www.pgcareers.com/cn/zh", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}];
+const QZ_SITES=[{"co": "腾讯", "cat": "互联网大厂", "url": "https://join.qq.com/post.html?query=p_1", "auto": false, "note": "用本机后端打开 Offer 时，直接读取腾讯招聘接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "腾讯招聘"}, {"co": "字节跳动", "cat": "互联网大厂", "url": "https://jobs.bytedance.com/campus/position", "auto": true}, {"co": "阿里巴巴（含阿里国际、阿里云）", "cat": "互联网大厂", "url": "https://campus-talent.alibaba.com/campus/position?batchId=100000760001", "auto": true}, {"co": "美团", "cat": "互联网大厂", "url": "https://zhaopin.meituan.com/web/position?hiringType=2_1", "auto": true}, {"co": "京东", "cat": "互联网大厂", "url": "https://campus.jd.com/#/jobs", "auto": true}, {"co": "百度", "cat": "互联网大厂", "url": "https://talent.baidu.com/jobs/list?recruitType=GRADUATE", "auto": true}, {"co": "快手", "cat": "互联网大厂", "url": "https://campus.kuaishou.cn/#/campus/jobs", "auto": false, "note": "用本机后端打开 Offer 时，直接读取快手校招接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "快手校招"}, {"co": "网易", "cat": "互联网大厂", "url": "https://campus.163.com/app/job/position", "auto": false, "note": "用本机后端打开 Offer 时，直接读取网易校招接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "网易校招"}, {"co": "网易雷火", "cat": "互联网大厂", "url": "https://leihuo.163.com/campus/#/full", "auto": false, "direct": "网易雷火", "note": "网易游戏雷火事业群，独立的招聘系统。用本机后端打开 Offer 时直接读取（2026-09-20 实测 63 个岗位）。"}, {"co": "小红书", "cat": "互联网大厂", "url": "https://job.xiaohongshu.com/campus/position", "auto": true}, {"co": "哔哩哔哩", "cat": "互联网大厂", "url": "https://jobs.bilibili.com/campus/positions", "auto": true}, {"co": "滴滴", "cat": "互联网大厂", "url": "https://campus.didiglobal.com/campus_apply/didiglobal/96064#/jobs", "auto": true}, {"co": "小米", "cat": "互联网大厂", "url": "https://xiaomi.jobs.f.mioffice.cn/campus/", "auto": false, "note": "用本机后端打开 Offer 时，直接读取飞书招聘接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "飞书招聘"}, {"co": "华为", "cat": "互联网大厂", "url": "https://career.huawei.com/reccampportal/portal5/campus-recruitment.html", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "荣耀", "cat": "互联网大厂", "url": "https://career.honor.com/SU61b9b9992f9d24431f5050a5/pb/school.html", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "拼多多 / Temu", "cat": "出海", "url": "https://careers.pddglobalhr.com/campus/grad", "auto": true}, {"co": "携程", "cat": "出海", "url": "https://careers.trip.com/#/campus/job", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "OPPO", "cat": "出海", "url": "https://careers.oppo.com/university/oppo/campus/post", "auto": true}, {"co": "vivo", "cat": "出海", "url": "https://hr-campus.vivo.com/campus", "auto": false, "note": "用本机后端打开 Offer 时，直接读取北森接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "北森"}, {"co": "SHEIN", "cat": "出海", "url": "https://careers.shein.com/Students-&-Graduates", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "安克创新", "cat": "出海", "url": "https://anker-in.jobs.feishu.cn/campushirecn/", "auto": true, "direct": "飞书招聘"}, {"co": "TikTok", "cat": "出海", "url": "https://lifeattiktok.com/search?recruitment_id_list=202", "auto": false, "note": "用本机后端打开 Offer 时，直接读取TikTok 招聘接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "TikTok 招聘"}, {"co": "传音控股", "cat": "出海", "url": "https://transsion.zhiye.com/campus/jobs", "auto": true, "direct": "北森"}, {"co": "名创优品", "cat": "出海", "url": "https://miniso.zhiye.com/campus/jobs", "auto": true, "direct": "北森"}, {"co": "泡泡玛特", "cat": "出海", "url": "https://popmart.zhiye.com/campus/jobs", "auto": false, "note": "用本机后端打开 Offer 时，直接读取北森接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "北森"}, {"co": "米哈游", "cat": "出海", "url": "https://jobs.mihoyo.com/#/campus/position", "auto": false, "note": "用本机后端打开 Offer 时，直接读取米哈游招聘接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "米哈游招聘"}, {"co": "莉莉丝", "cat": "出海", "url": "https://lilithgames.jobs.feishu.cn/campus", "auto": true, "direct": "飞书招聘"}, {"co": "大疆", "cat": "出海", "url": "https://apply.careers.dji.com/campus-recruitment/dji/143359?locale=zh-CN#/jobs", "auto": true}, {"co": "比亚迪", "cat": "出海", "url": "https://job.byd.com/portal/pc/", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "蚂蚁国际", "cat": "出海", "url": "https://www.ant-intl.com/cn/job-search-campus/", "auto": false, "note": "用本机后端打开 Offer 时，直接读取蚂蚁招聘接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "蚂蚁招聘"}, {"co": "月之暗面", "cat": "AI 与机器人", "url": "https://moonshot.jobs.feishu.cn/campus", "auto": false, "note": "用本机后端打开 Offer 时，直接读取飞书招聘接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "飞书招聘"}, {"co": "智谱", "cat": "AI 与机器人", "url": "https://zhipu-ai.jobs.feishu.cn/zhipucampus/position/list", "auto": true, "direct": "飞书招聘"}, {"co": "MiniMax", "cat": "AI 与机器人", "url": "https://vrfi1sk8a0.jobs.feishu.cn/379481", "auto": true, "direct": "飞书招聘"}, {"co": "阶跃星辰", "cat": "AI 与机器人", "url": "https://app.mokahr.com/campus-recruitment/step/141903", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "DeepSeek", "cat": "AI 与机器人", "url": "https://app.mokahr.com/campus_apply/high-flyer/4605#/jobs", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "商汤科技", "cat": "AI 与机器人", "url": "https://hr.sensetime.com/", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "宇树科技", "cat": "AI 与机器人", "url": "https://unitree.zhiye.com/", "auto": false, "note": "用本机后端打开 Offer 时，直接读取北森接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "北森"}, {"co": "得物", "cat": "新消费", "url": "https://campus.dewu.com/578078", "auto": false, "note": "用本机后端打开 Offer 时，直接读取飞书招聘接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "飞书招聘"}, {"co": "蔚来", "cat": "新能源", "url": "https://nio.jobs.feishu.cn/campus", "auto": true, "direct": "飞书招聘"}, {"co": "理想汽车", "cat": "新能源", "url": "https://li.jobs.feishu.cn/", "auto": true, "direct": "飞书招聘"}, {"co": "小鹏汽车", "cat": "新能源", "url": "https://xiaopeng.jobs.feishu.cn/campus", "auto": false, "note": "用本机后端打开 Offer 时，直接读取飞书招聘接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "飞书招聘"}, {"co": "宁德时代", "cat": "新能源", "url": "https://app.mokahr.com/campus-recruitment/catlhr/148948#/jobs", "auto": true}, {"co": "蚂蚁集团", "cat": "金融", "url": "https://talent.antgroup.com/campus-full-list", "auto": false, "note": "用本机后端打开 Offer 时，直接读取蚂蚁招聘接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "蚂蚁招聘"}, {"co": "招商银行", "cat": "金融", "url": "https://career.cmbchina.com/", "auto": false, "note": "按分行发布招聘公告，每份公告单独投递，没有统一岗位列表（2026-09-20 实测）。在公告里选好分行后再投。"}, {"co": "微众银行", "cat": "金融", "url": "https://campus.webank.com/campus-recruitment/webankhr/18005", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "中国平安", "cat": "金融", "url": "https://campus.pingan.com/", "auto": false, "note": "岗位列表未提供公开接口（2026-09-20 实测），需要在官网筛选后把列表页网址加到「岗位来源」。"}, {"co": "中金公司", "cat": "金融", "url": "https://cicc.zhiye.com/campus", "auto": false, "note": "用本机后端打开 Offer 时，直接读取北森接口，不用手动筛选、不用插件（2026-09-19 实测）。双击 HTML 离线使用时仍需在官网筛选后粘贴列表页网址。", "direct": "北森"}, {"co": "中信证券", "cat": "金融", "url": "https://careers.citics.com/", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "华泰证券", "cat": "金融", "url": "https://wecruit.hotjob.cn/SU6419745cbef57c635fe10142/pb/school.html?projectCode=107103&channelId=61d886b0bef57c659fd91ea8", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "欧莱雅", "cat": "快消外企", "url": "https://careers.loreal.com/zh_CN/content/Students", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}, {"co": "宝洁", "cat": "快消外企", "url": "https://www.pgcareers.com/cn/zh", "auto": false, "note": "列表需要在官网上先选项目 / 职能，或需要登录：点开筛好后把网址加到「岗位来源」"}];
 
 /*@/QZ:sites.js*//*@QZ:autopilot.js*/
 
@@ -4457,7 +4485,7 @@ function apDirOfJob(job){
   return site&&typeof qzDirOf==="function"?qzDirOf(site.cat):"biz";
 }
 /* 后端能直接读取的招聘系统：以后端 /api/jobs/sources/direct 为准（启动时拉取），这里是离线时的备份 */
-let QZ_DIRECT=[[/^https?:\/\/([^/]+\.(jobs\.feishu\.cn|jobs\.f\.mioffice\.cn)|campus\.dewu\.com)(\/|$)/i,"飞书招聘"],[/^https?:\/\/([^/]+\.zhiye\.com|hr-campus\.vivo\.com)(\/|$)/i,"北森"],[/^https?:\/\/join\.qq\.com(\/|$)/i,"腾讯招聘"],[/^https?:\/\/campus\.kuaishou\.cn(\/|$)/i,"快手校招"],[/^https?:\/\/campus(\.game)?\.163\.com(\/|$)/i,"网易校招"],[/^https?:\/\/jobs\.mihoyo\.com(\/|$)/i,"米哈游招聘"],[/^https?:\/\/(talent\.antgroup\.com|www\.ant-intl\.com)(\/|$)/i,"蚂蚁招聘"],[/^https?:\/\/lifeattiktok\.com(\/|$)/i,"TikTok 招聘"]];
+let QZ_DIRECT=[[/^https?:\/\/([^/]+\.(jobs\.feishu\.cn|jobs\.f\.mioffice\.cn)|campus\.dewu\.com)(\/|$)/i,"飞书招聘"],[/^https?:\/\/([^/]+\.zhiye\.com|hr-campus\.vivo\.com)(\/|$)/i,"北森"],[/^https?:\/\/join\.qq\.com(\/|$)/i,"腾讯招聘"],[/^https?:\/\/campus\.kuaishou\.cn(\/|$)/i,"快手校招"],[/^https?:\/\/campus(\.game)?\.163\.com(\/|$)/i,"网易校招"],[/^https?:\/\/jobs\.mihoyo\.com(\/|$)/i,"米哈游招聘"],[/^https?:\/\/(talent\.antgroup\.com|www\.ant-intl\.com)(\/|$)/i,"蚂蚁招聘"],[/^https?:\/\/lifeattiktok\.com(\/|$)/i,"TikTok 招聘"],[/^https?:\/\/(leihuo\.163\.com|xiaozhao\.leihuo\.netease\.com)(\/|$)/i,"网易雷火"]];
 async function qzDirectSync(){ try{ const xs=await qzApi("/jobs/sources/direct"); if(Array.isArray(xs)&&xs.length) QZ_DIRECT=xs.map(x=>[new RegExp(x.pattern,"i"),x.system]); }catch(e){} }
 setTimeout(()=>{ if(typeof QZ_BACKEND!=="undefined"&&QZ_BACKEND.online) qzDirectSync().then(()=>{ if(typeof rdVisible==="function"&&rdVisible()) renderRadar(); }); },1500);
 /* 这个来源能不能由本机后端直接读取（不开网页、不用插件） */
@@ -5242,6 +5270,45 @@ function apSetStage(id,stage){
 }
 function apReopen(id){ const a=S.apps.find(x=>x.id===id); if(!a) return; a.stage=a.failAt||"已投递"; a.result=""; a.st="pending"; a.failAt=""; save(); renderApps(); }
 
+
+/* ---------- 导出 Excel ----------
+   复用简历导出用的 zip 打包器生成真正的 .xlsx（两个工作表：投递记录、进度时间线），不依赖任何外部库。 */
+function apX(v){ return String(v==null?"":v).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])).replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g,""); }
+function apSheet(rows,widths){
+  const col=i=>{ let s="",n=i+1; while(n){ s=String.fromCharCode(64+((n-1)%26+1))+s; n=Math.floor((n-1)/26); } return s; };
+  const body=rows.map((r,ri)=>`<row r="${ri+1}">${r.map((v,ci)=>{
+    const num=typeof v==="number"&&isFinite(v);
+    return `<c r="${col(ci)}${ri+1}"${ri===0?' s="1"':""}${num?"":' t="inlineStr"'}>${num?`<v>${v}</v>`:`<is><t xml:space="preserve">${apX(v)}</t></is>`}</c>`;
+  }).join("")}</row>`).join("");
+  return `<?xml version="1.0" encoding="UTF-8"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+    <cols>${(widths||[]).map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join("")}</cols>
+    <sheetData>${body}</sheetData></worksheet>`;
+}
+function apExport(){
+  if(typeof rvZip!=="function") return toast("这个版本不支持导出 Excel");
+  const all=(S.apps||[]), stageName=a=>{ const o=apOutcome(a); return o==="offer"?"已拿 Offer":o==="fail"?(a.failAt?`未通过（${AP_STEP[a.failAt]||a.failAt}）`:"未通过"):o==="quit"?"已放弃":o==="wish"?"想投 / 收藏":AP_STEP[a.stage]||a.stage||""; };
+  const head=["公司","部门","岗位","城市","渠道","当前阶段","这一轮","投递日期","截止日期","匹配度","投递用简历","复盘数","岗位链接","归类","备注"];
+  const rows=[head,...all.map(a=>[a.company||"",a.dept||"",a.role||"",a.city||"",a.channel||"",stageName(a),
+    ["active","wish"].includes(apOutcome(a))?({pending:"待定",pass:"通过",fail:"未通过"}[apCurStatus(a)]||""):"",String(a.date||""),String(a.deadline||""),
+    a.match?Number(a.match):"",(a.resumeSnap&&a.resumeSnap.file)||a.resumeFile||"",
+    (S.reviews||[]).filter(r=>r.appId===a.id).length,a.url||"",apPast(a)?"往期实习":"本季秋招",String(a.note||"").replace(/\s+/g," ").slice(0,300)])];
+  const tl=[["日期","公司","岗位","动作","阶段"]];
+  all.forEach(a=>(a.hist||[]).forEach(h=>tl.push([String(h.at||"").slice(0,10),a.company||"",a.role||"",{pass:"通过",fail:"未通过",set:"进入"}[h.st]||h.st||"",AP_STEP[h.stage]||h.stage||""])));
+  const sheets=[["投递记录",apSheet(rows,[16,16,26,12,10,14,8,12,12,8,26,8,40,10,40])],["进度时间线",apSheet(tl,[12,16,26,10,10])]];
+  const files=[
+    {name:"[Content_Types].xml",data:`<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${sheets.map((x,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join("")}</Types>`},
+    {name:"_rels/.rels",data:`<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`},
+    {name:"xl/workbook.xml",data:`<?xml version="1.0" encoding="UTF-8"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${sheets.map((x,i)=>`<sheet name="${apX(x[0])}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join("")}</sheets></workbook>`},
+    {name:"xl/_rels/workbook.xml.rels",data:`<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${sheets.map((x,i)=>`<Relationship Id="rId${i+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join("")}<Relationship Id="rIdS" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`},
+    {name:"xl/styles.xml",data:`<?xml version="1.0" encoding="UTF-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="1"><fill><patternFill patternType="none"/></fill></fills><borders count="1"><border/></borders><cellStyleXfs count="1"><xf/></cellStyleXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles><cellXfs count="2"><xf xfId="0"/><xf xfId="0" fontId="1" applyFont="1"/></cellXfs></styleSheet>`},
+    ...sheets.map((x,i)=>({name:`xl/worksheets/sheet${i+1}.xml`,data:x[1]})),
+  ];
+  const blob=new Blob([rvZip(files)],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download=`投递进度_${qzDay()}.xlsx`; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+  toast(`已导出 ${all.length} 条投递`);
+}
+
 /* ---------- 渲染 ---------- */
 function apStepper(a){
   const o=apOutcome(a), at=o==="fail"?(a.failAt||""):a.stage, idx=AP_FLOW.indexOf(at);
@@ -5312,7 +5379,7 @@ function renderApps(){
   if(!box){ box=document.createElement("div"); box.id="appsHome"; v.appendChild(box); }
   // 旧版的看板 / 列表 / 阶段条不再使用
   ["kanbanWrap","listWrap","appPhaseBar"].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display="none"; });
-  const ph=v.querySelector(".pagehead"); if(ph&&!ph.dataset.ap){ ph.dataset.ap=1; ph.innerHTML=`<div><h1>投递进度</h1><p id="apFacts"></p></div><div class="pg-act"><button class="btn pri" onclick="openApp()">新增投递</button></div>`; }
+  const ph=v.querySelector(".pagehead"); if(ph&&!ph.dataset.ap){ ph.dataset.ap=1; ph.innerHTML=`<div><h1>投递进度</h1><p id="apFacts"></p></div><div class="pg-act"><button class="btn" onclick="apExport()" title="导出 xlsx：投递记录 + 进度时间线">导出 Excel</button><button class="btn pri" onclick="openApp()">新增投递</button></div>`; }
   const all=(S.apps||[]), cur=all.filter(a=>!apPast(a)), past=all.filter(apPast);
   const by=k=>cur.filter(a=>apOutcome(a)===k);
   const F=[["active","进行中",by("active")],["wish","想投",by("wish")],["offer","Offer",by("offer")],["ended","已结束",[...by("fail"),...by("quit")]],["all","全部",cur]];
@@ -5505,7 +5572,7 @@ function renderRevPhaseBar(){
   const n=p=>p==="全部"?S.reviews.length:S.reviews.filter(r=>(r.phase||"秋招")===p).length;
   box.innerHTML=["全部","秋招","实习期"].map(p=>
     `<div class="chip ${p===revPhase?"on":""}" onclick="revPhase='${p}';renderReviews()">${p} ${n(p)}</div>`).join("")
-    +`<span class="muted" style="margin-left:8px">「实习期」指投实习时的面试，不计入这次秋招的进度</span>`;
+    +`<span class="muted" style="margin-left:8px">「实习期」是投实习时的面试，不计入本季</span>`;
 }
 function renderReviews(){
   renderReviewAnalysis();
@@ -5517,27 +5584,29 @@ function renderReviews(){
   document.getElementById("reviewList").innerHTML = list.length? list.map(r=>{
     const sc=(r.qs||[]).filter(q=>q.score);
     const avg=sc.length? sc.reduce((s,q)=>s+q.score,0)/sc.length : 0;
-    return `<div class="card pad" style="margin-bottom:14px">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
-        <div><div style="font-size:16px;font-weight:700">${esc(r.company)} · ${esc(r.role)}</div>
-          <div class="rv-meta">${[esc(r.round),r.date&&esc(r.date),r.interviewer&&esc(r.interviewer),r.minutes&&r.minutes+" 分钟",r.result&&`<b class="${r.result==="过"?"ok":"bad"}">${esc(r.result)}</b>`,avg&&`均分 ${avg.toFixed(1)}`].filter(Boolean).join(" · ")}
-          </div></div>
-        <div style="display:flex;gap:6px"><button class="btn sm" onclick="openReview('${r.id}')">编辑</button></div>
-      </div>
-      ${r.radar?`<div class="ablock"><h2 class="h5">能力自评</h2><div style="display:flex;gap:14px;flex-wrap:wrap">${
-        RADAR_DIMS.map(d=>{const v=(r.radar||{})[d]||0;return `<span class="rv-dim ${v&&v<3?"low":""}">${d} <b class="num">${v||"–"}</b></span>`}).join("")}</div></div>`:""}
-      ${r.signals?`<div class="ablock"><h2 class="h5">面试官反应信号</h2><div class="body">${nl2(r.signals)}</div></div>`:""}
-      ${r.summary?`<div class="ablock"><h2 class="h5">整体复盘</h2><div class="body">${nl2(r.summary)}</div></div>`:""}
-      ${r.nextAction?`<div class="ablock"><h2 class="h5">下一步动作</h2><div class="body">${nl2(r.nextAction)}</div></div>`:""}
-      <div class="ablock"><h2 class="h5">逐题记录（${(r.qs||[]).length}）</h2>
+    const fails=(r.qs||[]).flatMap(q=>q.fail||[]), lowN=(r.qs||[]).filter(q=>q.score&&q.score<=2).length;
+    return `<article class="rvc">
+      <header class="rvc-h">
+        <div><div class="rvc-t"><b>${esc(r.company)}</b><span>${esc(r.role)}</span></div>
+          <div class="rvc-f">${[esc(r.round),r.date&&esc(r.date),r.interviewer&&esc(r.interviewer),r.minutes&&r.minutes+" 分钟",(r.qs||[]).length+" 题"].filter(Boolean).join(" · ")}</div></div>
+        <div class="rvc-r">${r.result?`<span class="rvc-badge ${r.result==="过"?"ok":"bad"}">${esc(r.result)}</span>`:""}${avg?`<span class="rvc-avg" title="逐题自评均分"><b class="num">${avg.toFixed(1)}</b><i>/5</i></span>`:""}
+          <button class="btn sm ghost" onclick="openReview('${r.id}')">编辑</button></div>
+      </header>
+      ${r.radar?`<div class="rvc-dims">${RADAR_DIMS.map(d=>{const v=(r.radar||{})[d]||0;return `<span class="rv-dim ${v&&v<3?"low":""}">${d} <b class="num">${v||"–"}</b></span>`}).join("")}</div>`:""}
+      ${r.summary?`<p class="rvc-sum">${nl2(r.summary)}</p>`:""}
+      ${fails.length?`<div class="qj-risk rvc-fails">${[...new Set(fails)].slice(0,6).map(x=>`<span>${esc(x)}</span>`).join("")}</div>`:""}
+      ${r.nextAction?`<p class="rvc-next"><b>下一步</b>${esc(r.nextAction)}</p>`:""}
+      <details class="rvc-more"><summary>逐题记录（${(r.qs||[]).length}）${lowN?` · ${lowN} 题低分`:""}${r.signals?" · 面试官信号":""}</summary>
+        ${r.signals?`<div class="ablock"><h2 class="h5">面试官反应信号</h2><div class="body">${nl2(r.signals)}</div></div>`:""}
         ${(r.qs||[]).map(q=>`<div class="rq">
           <div class="rq-q">${esc(q.q)}<span class="rq-m">${[q.type&&esc(q.type),q.score&&`<b class="${q.score<3?"bad":""}">${q.score} / 5</b>`].filter(Boolean).join(" · ")}</span></div>
           ${(q.fail||[]).length?`<div class="rq-fail">失分：${q.fail.map(esc).join("、")}</div>`:""}
           ${q.my?`<div class="muted" style="margin-top:6px"><b>我答：</b>${esc(q.my)}</div>`:""}
-          ${q.fix?`<div style="margin-top:5px;color:var(--orange);font-size:13px"><b>下次改：</b>${esc(q.fix)}</div>`:""}
+          ${q.fix?`<div class="rq-fix"><b>下次改：</b>${esc(q.fix)}</div>`:""}
           <div class="rq-act"><button class="btn sm ghost" onclick="promoteToBank(${JSON.stringify(JSON.stringify(q.q))})">存入答案库</button></div>
-        </div>`).join("")}</div>
-    </div>`;}).join("")
+        </div>`).join("")}</details>
+      <footer class="rvc-act">${lowN?`<button class="btn sm" onclick="drillWeak()">针对低分题开 Mock</button>`:""}<button class="btn sm ghost" onclick="go('mock')">再练一轮</button></footer>
+    </article>`;}).join("")
    : '<div class="card"><div class="empty"><div class="ic">🗒️</div>还没有复盘。这是整套系统里最值钱的模块——面完 30 分钟内记下来。</div></div>';
 }
 function renderReviewAnalysis(){

@@ -29,7 +29,7 @@ flowchart LR
   UI -- "/api/ai/chat" --> LLM
   UI <-- "window.postMessage" --> EXT
   API --- DB
-  F -- "公开岗位接口" --> ATS["飞书招聘 / 北森 / 腾讯 / 快手<br/>网易 / 米哈游 / 蚂蚁 / TikTok"]
+  F -- "公开岗位接口" --> ATS["飞书招聘 / 北森 / 腾讯 / 快手<br/>网易 · 雷火 / 米哈游 / 蚂蚁 / TikTok"]
   EXT -- "打开页面读取" --> Sites["其他招聘官网"]
   LLM -- "OpenAI 兼容接口" --> Model["用户配置的模型服务"]
 ```
@@ -68,7 +68,7 @@ flowchart LR
 | `api.js` | 与后端的状态同步：版本号冲突检测、SSE 实时刷新 |
 | `radar.js` | 职位雷达：来源库、监控、刷新、岗位表 |
 | `autopilot.js` | 岗位队列：收集 → 筛选打分 → 待审核 → 生成简历 → 网申；后端直读与插件两条收集路径 |
-| `apps.js` | 投递进度：卡片 / 表格 / 动态视图，阶段与每轮结果，简历冻结 |
+| `apps.js` | 投递进度：卡片 / 表格 / 动态视图，阶段与每轮结果，简历冻结，导出 xlsx（复用简历导出的 zip 打包器，无外部依赖） |
 | `mock.js` | Mock 面试题库与自动评分 |
 | `share/interview.js` | 答案库、面试复盘、面试深挖 |
 | `agent.js` | AI 顾问（见第 6 节） |

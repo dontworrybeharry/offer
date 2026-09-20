@@ -798,3 +798,31 @@ tr.is-on td{background:#FBFCFD}
 .qa.open .qa-prev{display:none}
 #bankList .qa-meta{display:none}
 .ap-empty p{margin:0 0 12px;color:var(--t3);font-size:13.5px}
+
+/* ---------- 面试复盘 ---------- */
+.rvc{padding:18px 0;border-bottom:1px solid var(--bd)}
+.rvc-h{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.rvc-t{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.rvc-t b{font-size:16px;font-weight:600}
+.rvc-t span{font-size:14px;color:var(--t2)}
+.rvc-f{margin-top:4px;font-size:12.5px;color:var(--t3)}
+.rvc-r{display:flex;align-items:center;gap:10px}
+.rvc-badge{font-size:12.5px;font-weight:600;padding:2px 10px;border-radius:6px;background:#F1F3F6;color:var(--t2)}
+.rvc-badge.ok{background:#E7F4EC;color:#177245}
+.rvc-badge.bad{background:#FBEAE8;color:#B42318}
+.rvc-avg{display:inline-flex;align-items:baseline;gap:1px;color:var(--t1)}
+.rvc-avg b{font-size:17px;font-weight:600}
+.rvc-avg i{font-style:normal;font-size:12px;color:var(--t3)}
+.rvc-dims{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:12px}
+.rvc-sum{margin:12px 0 0;font-size:13.5px;line-height:1.8;color:var(--t2);max-width:80ch}
+.rvc-fails{margin-top:10px}
+.rvc-next{margin:10px 0 0;font-size:13.5px;line-height:1.75;color:var(--t1);max-width:80ch}
+.rvc-next b{display:inline-block;margin-right:8px;font-size:12px;color:#8F5200}
+.rvc-more{margin-top:12px}
+.rvc-more>summary{cursor:pointer;font-size:13px;color:var(--t3);list-style:none}
+.rvc-more>summary::-webkit-details-marker{display:none}
+.rvc-more>summary::before{content:"+";display:inline-block;width:14px;color:var(--t3)}
+.rvc-more[open]>summary::before{content:"–"}
+.rq-fix{margin-top:5px;color:#8F5200;font-size:13px}
+.rvc-act{display:flex;gap:8px;margin-top:12px}
+#reviewList .card{border:0;padding:0}

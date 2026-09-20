@@ -183,7 +183,7 @@ def test_direct_fetch_detect_and_unsupported(client):
     assert fetchers.detect("https://jobs.bytedance.com/campus/position") is None
     assert fetchers._text("<p>负责<b>数据</b>分析</p><br>要求&amp;加分") == "负责数据分析\n\n要求&加分"
     kinds = {x["kind"] for x in client.get("/api/jobs/sources/direct").json()}
-    assert {"feishu", "zhiye", "tencent", "kuaishou", "netease", "mihoyo", "antgroup", "tiktok"} <= kinds
+    assert {"feishu", "zhiye", "tencent", "kuaishou", "netease", "mihoyo", "antgroup", "tiktok", "leihuo"} <= kinds
     r = client.post("/api/jobs/fetch", json={"url": "https://example.com/jobs"})
     assert r.status_code == 422 and "不支持" in r.json()["detail"]
 
@@ -193,7 +193,8 @@ def test_direct_fetch_more_systems():
     cases = {"https://campus.163.com/app/job/position?id=103": "netease", "https://campus.game.163.com/app/job/position?id=102": "netease",
              "https://jobs.mihoyo.com/#/campus/position": "mihoyo", "https://talent.antgroup.com/campus-full-list": "antgroup",
              "https://www.ant-intl.com/cn/job-search-campus/": "antgroup", "https://lifeattiktok.com/search?recruitment_id_list=202": "tiktok",
-             "https://campus.dewu.com/578078": "feishu", "https://hr-campus.vivo.com/campus": "zhiye"}
+             "https://campus.dewu.com/578078": "feishu", "https://hr-campus.vivo.com/campus": "zhiye",
+             "https://leihuo.163.com/campus/#/full": "leihuo"}
     for url, kind in cases.items():
         assert fetchers.detect(url)[0] == kind, url
     for url in ("https://careers.trip.com/#/campus/job", "https://app.mokahr.com/campus_apply/high-flyer/4605", "https://career.huawei.com/"):

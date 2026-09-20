@@ -90,6 +90,45 @@ function apSetStage(id,stage){
 }
 function apReopen(id){ const a=S.apps.find(x=>x.id===id); if(!a) return; a.stage=a.failAt||"已投递"; a.result=""; a.st="pending"; a.failAt=""; save(); renderApps(); }
 
+
+/* ---------- 导出 Excel ----------
+   复用简历导出用的 zip 打包器生成真正的 .xlsx（两个工作表：投递记录、进度时间线），不依赖任何外部库。 */
+function apX(v){ return String(v==null?"":v).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])).replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g,""); }
+function apSheet(rows,widths){
+  const col=i=>{ let s="",n=i+1; while(n){ s=String.fromCharCode(64+((n-1)%26+1))+s; n=Math.floor((n-1)/26); } return s; };
+  const body=rows.map((r,ri)=>`<row r="${ri+1}">${r.map((v,ci)=>{
+    const num=typeof v==="number"&&isFinite(v);
+    return `<c r="${col(ci)}${ri+1}"${ri===0?' s="1"':""}${num?"":' t="inlineStr"'}>${num?`<v>${v}</v>`:`<is><t xml:space="preserve">${apX(v)}</t></is>`}</c>`;
+  }).join("")}</row>`).join("");
+  return `<?xml version="1.0" encoding="UTF-8"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+    <cols>${(widths||[]).map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join("")}</cols>
+    <sheetData>${body}</sheetData></worksheet>`;
+}
+function apExport(){
+  if(typeof rvZip!=="function") return toast("这个版本不支持导出 Excel");
+  const all=(S.apps||[]), stageName=a=>{ const o=apOutcome(a); return o==="offer"?"已拿 Offer":o==="fail"?(a.failAt?`未通过（${AP_STEP[a.failAt]||a.failAt}）`:"未通过"):o==="quit"?"已放弃":o==="wish"?"想投 / 收藏":AP_STEP[a.stage]||a.stage||""; };
+  const head=["公司","部门","岗位","城市","渠道","当前阶段","这一轮","投递日期","截止日期","匹配度","投递用简历","复盘数","岗位链接","归类","备注"];
+  const rows=[head,...all.map(a=>[a.company||"",a.dept||"",a.role||"",a.city||"",a.channel||"",stageName(a),
+    ["active","wish"].includes(apOutcome(a))?({pending:"待定",pass:"通过",fail:"未通过"}[apCurStatus(a)]||""):"",String(a.date||""),String(a.deadline||""),
+    a.match?Number(a.match):"",(a.resumeSnap&&a.resumeSnap.file)||a.resumeFile||"",
+    (S.reviews||[]).filter(r=>r.appId===a.id).length,a.url||"",apPast(a)?"往期实习":"本季秋招",String(a.note||"").replace(/\s+/g," ").slice(0,300)])];
+  const tl=[["日期","公司","岗位","动作","阶段"]];
+  all.forEach(a=>(a.hist||[]).forEach(h=>tl.push([String(h.at||"").slice(0,10),a.company||"",a.role||"",{pass:"通过",fail:"未通过",set:"进入"}[h.st]||h.st||"",AP_STEP[h.stage]||h.stage||""])));
+  const sheets=[["投递记录",apSheet(rows,[16,16,26,12,10,14,8,12,12,8,26,8,40,10,40])],["进度时间线",apSheet(tl,[12,16,26,10,10])]];
+  const files=[
+    {name:"[Content_Types].xml",data:`<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${sheets.map((x,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join("")}</Types>`},
+    {name:"_rels/.rels",data:`<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`},
+    {name:"xl/workbook.xml",data:`<?xml version="1.0" encoding="UTF-8"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${sheets.map((x,i)=>`<sheet name="${apX(x[0])}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join("")}</sheets></workbook>`},
+    {name:"xl/_rels/workbook.xml.rels",data:`<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${sheets.map((x,i)=>`<Relationship Id="rId${i+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join("")}<Relationship Id="rIdS" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`},
+    {name:"xl/styles.xml",data:`<?xml version="1.0" encoding="UTF-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="1"><fill><patternFill patternType="none"/></fill></fills><borders count="1"><border/></borders><cellStyleXfs count="1"><xf/></cellStyleXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles><cellXfs count="2"><xf xfId="0"/><xf xfId="0" fontId="1" applyFont="1"/></cellXfs></styleSheet>`},
+    ...sheets.map((x,i)=>({name:`xl/worksheets/sheet${i+1}.xml`,data:x[1]})),
+  ];
+  const blob=new Blob([rvZip(files)],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download=`投递进度_${qzDay()}.xlsx`; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+  toast(`已导出 ${all.length} 条投递`);
+}
+
 /* ---------- 渲染 ---------- */
 function apStepper(a){
   const o=apOutcome(a), at=o==="fail"?(a.failAt||""):a.stage, idx=AP_FLOW.indexOf(at);
@@ -160,7 +199,7 @@ function renderApps(){
   if(!box){ box=document.createElement("div"); box.id="appsHome"; v.appendChild(box); }
   // 旧版的看板 / 列表 / 阶段条不再使用
   ["kanbanWrap","listWrap","appPhaseBar"].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display="none"; });
-  const ph=v.querySelector(".pagehead"); if(ph&&!ph.dataset.ap){ ph.dataset.ap=1; ph.innerHTML=`<div><h1>投递进度</h1><p id="apFacts"></p></div><div class="pg-act"><button class="btn pri" onclick="openApp()">新增投递</button></div>`; }
+  const ph=v.querySelector(".pagehead"); if(ph&&!ph.dataset.ap){ ph.dataset.ap=1; ph.innerHTML=`<div><h1>投递进度</h1><p id="apFacts"></p></div><div class="pg-act"><button class="btn" onclick="apExport()" title="导出 xlsx：投递记录 + 进度时间线">导出 Excel</button><button class="btn pri" onclick="openApp()">新增投递</button></div>`; }
   const all=(S.apps||[]), cur=all.filter(a=>!apPast(a)), past=all.filter(apPast);
   const by=k=>cur.filter(a=>apOutcome(a)===k);
   const F=[["active","进行中",by("active")],["wish","想投",by("wish")],["offer","Offer",by("offer")],["ended","已结束",[...by("fail"),...by("quit")]],["all","全部",cur]];

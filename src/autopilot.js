@@ -458,7 +458,7 @@ function apDirOfJob(job){
   return site&&typeof qzDirOf==="function"?qzDirOf(site.cat):"biz";
 }
 /* 后端能直接读取的招聘系统：以后端 /api/jobs/sources/direct 为准（启动时拉取），这里是离线时的备份 */
-let QZ_DIRECT=[[/^https?:\/\/([^/]+\.(jobs\.feishu\.cn|jobs\.f\.mioffice\.cn)|campus\.dewu\.com)(\/|$)/i,"飞书招聘"],[/^https?:\/\/([^/]+\.zhiye\.com|hr-campus\.vivo\.com)(\/|$)/i,"北森"],[/^https?:\/\/join\.qq\.com(\/|$)/i,"腾讯招聘"],[/^https?:\/\/campus\.kuaishou\.cn(\/|$)/i,"快手校招"],[/^https?:\/\/campus(\.game)?\.163\.com(\/|$)/i,"网易校招"],[/^https?:\/\/jobs\.mihoyo\.com(\/|$)/i,"米哈游招聘"],[/^https?:\/\/(talent\.antgroup\.com|www\.ant-intl\.com)(\/|$)/i,"蚂蚁招聘"],[/^https?:\/\/lifeattiktok\.com(\/|$)/i,"TikTok 招聘"]];
+let QZ_DIRECT=[[/^https?:\/\/([^/]+\.(jobs\.feishu\.cn|jobs\.f\.mioffice\.cn)|campus\.dewu\.com)(\/|$)/i,"飞书招聘"],[/^https?:\/\/([^/]+\.zhiye\.com|hr-campus\.vivo\.com)(\/|$)/i,"北森"],[/^https?:\/\/join\.qq\.com(\/|$)/i,"腾讯招聘"],[/^https?:\/\/campus\.kuaishou\.cn(\/|$)/i,"快手校招"],[/^https?:\/\/campus(\.game)?\.163\.com(\/|$)/i,"网易校招"],[/^https?:\/\/jobs\.mihoyo\.com(\/|$)/i,"米哈游招聘"],[/^https?:\/\/(talent\.antgroup\.com|www\.ant-intl\.com)(\/|$)/i,"蚂蚁招聘"],[/^https?:\/\/lifeattiktok\.com(\/|$)/i,"TikTok 招聘"],[/^https?:\/\/(leihuo\.163\.com|xiaozhao\.leihuo\.netease\.com)(\/|$)/i,"网易雷火"]];
 async function qzDirectSync(){ try{ const xs=await qzApi("/jobs/sources/direct"); if(Array.isArray(xs)&&xs.length) QZ_DIRECT=xs.map(x=>[new RegExp(x.pattern,"i"),x.system]); }catch(e){} }
 setTimeout(()=>{ if(typeof QZ_BACKEND!=="undefined"&&QZ_BACKEND.online) qzDirectSync().then(()=>{ if(typeof rdVisible==="function"&&rdVisible()) renderRadar(); }); },1500);
 /* 这个来源能不能由本机后端直接读取（不开网页、不用插件） */

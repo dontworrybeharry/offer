@@ -12,7 +12,8 @@
     北森      *.zhiye.com                                      列表接口直接带 JD，Category 2=校招 3=实习 1=社招
     腾讯      join.qq.com                                      列表 + 详情接口
     快手      campus.kuaishou.cn                               列表接口直接带 JD
-    网易      campus.163.com / campus.game.163.com             按校招导航里的项目读取，列表带 JD（雷火、日常实习是另外的系统）
+    网易      campus.163.com / campus.game.163.com             按校招导航里的项目读取，列表带 JD
+    网易雷火  leihuo.163.com                                   自己的招聘系统，列表带 JD
     米哈游    jobs.mihoyo.com                                  列表 + 详情接口
     蚂蚁      talent.antgroup.com、ant-intl.com（国际事业群）   列表带 JD（每页最多 20）；岗位没有独立链接，链接到列表页
     TikTok    lifeattiktok.com                                 字节海外门户的公开搜索接口，列表带 JD
@@ -319,6 +320,30 @@ async def _tiktok(client: httpx.AsyncClient, url: str, max_jobs: int, **_) -> li
     return jobs
 
 
+# ---------------------------------------------------------------- 网易雷火（xiaozhao.leihuo.netease.com）
+async def _leihuo(client: httpx.AsyncClient, url: str, max_jobs: int, **_) -> list[Job]:
+    m = re.search(r"project_id=(\d+)", url)
+    pid = m.group(1) if m else "77"          # 77 = 雷火 2027 届校园招聘（网址里带 project_id 时以网址为准）
+    jobs: list[Job] = []
+    page = 1
+    while len(jobs) < max_jobs:
+        r = await client.get("https://xiaozhao.leihuo.netease.com/api/apply/job/list/show",
+                             params={"job_name": "", "page_size": 100, "page_number": page, "project_id": pid})
+        r.raise_for_status()
+        d = r.json().get("data") or {}
+        items = d.get("apply_job_list") or []
+        for j in items:
+            jobs.append(Job(id=str(j.get("ehr_job_id") or j.get("job_code")), title=j.get("job_name", ""),
+                            url=j.get("job_detail_url") or f"https://campus.163.com/app/detail/index?id={j.get('ehr_job_id')}&projectId={pid}",
+                            city=str(j.get("work_place_name") or "").replace(",", "、"),
+                            jd=_jd(("职位描述", j.get("job_description")), ("任职要求", j.get("job_requirement"))),
+                            category=" ".join(x for x in (j.get("type_name"), j.get("category_name"), j.get("target")) if x)))
+        page += 1
+        if not items or d.get("last_page") or page > int(d.get("pages_count") or 1) or page > 20:
+            break
+    return jobs[:max_jobs]
+
+
 # ---------------------------------------------------------------- 识别
 ADAPTERS: list[tuple[str, str, re.Pattern[str], Callable[..., Awaitable[list[Job]]]]] = [
     ("feishu", "飞书招聘", re.compile(r"^https?://([^/]+\.(jobs\.feishu\.cn|jobs\.f\.mioffice\.cn)|campus\.dewu\.com)(/|$)", re.I), _feishu),
@@ -329,6 +354,7 @@ ADAPTERS: list[tuple[str, str, re.Pattern[str], Callable[..., Awaitable[list[Job
     ("mihoyo", "米哈游招聘", re.compile(r"^https?://jobs\.mihoyo\.com(/|$)", re.I), _mihoyo),
     ("antgroup", "蚂蚁招聘", re.compile(r"^https?://(talent\.antgroup\.com|www\.ant-intl\.com)(/|$)", re.I), _antgroup),
     ("tiktok", "TikTok 招聘", re.compile(r"^https?://lifeattiktok\.com(/|$)", re.I), _tiktok),
+    ("leihuo", "网易雷火", re.compile(r"^https?://(leihuo\.163\.com|xiaozhao\.leihuo\.netease\.com)(/|$)", re.I), _leihuo),
 ]
 
 

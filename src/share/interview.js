@@ -147,7 +147,7 @@ function renderRevPhaseBar(){
   const n=p=>p==="全部"?S.reviews.length:S.reviews.filter(r=>(r.phase||"秋招")===p).length;
   box.innerHTML=["全部","秋招","实习期"].map(p=>
     `<div class="chip ${p===revPhase?"on":""}" onclick="revPhase='${p}';renderReviews()">${p} ${n(p)}</div>`).join("")
-    +`<span class="muted" style="margin-left:8px">「实习期」指投实习时的面试，不计入这次秋招的进度</span>`;
+    +`<span class="muted" style="margin-left:8px">「实习期」是投实习时的面试，不计入本季</span>`;
 }
 function renderReviews(){
   renderReviewAnalysis();
@@ -159,27 +159,29 @@ function renderReviews(){
   document.getElementById("reviewList").innerHTML = list.length? list.map(r=>{
     const sc=(r.qs||[]).filter(q=>q.score);
     const avg=sc.length? sc.reduce((s,q)=>s+q.score,0)/sc.length : 0;
-    return `<div class="card pad" style="margin-bottom:14px">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
-        <div><div style="font-size:16px;font-weight:700">${esc(r.company)} · ${esc(r.role)}</div>
-          <div class="rv-meta">${[esc(r.round),r.date&&esc(r.date),r.interviewer&&esc(r.interviewer),r.minutes&&r.minutes+" 分钟",r.result&&`<b class="${r.result==="过"?"ok":"bad"}">${esc(r.result)}</b>`,avg&&`均分 ${avg.toFixed(1)}`].filter(Boolean).join(" · ")}
-          </div></div>
-        <div style="display:flex;gap:6px"><button class="btn sm" onclick="openReview('${r.id}')">编辑</button></div>
-      </div>
-      ${r.radar?`<div class="ablock"><h2 class="h5">能力自评</h2><div style="display:flex;gap:14px;flex-wrap:wrap">${
-        RADAR_DIMS.map(d=>{const v=(r.radar||{})[d]||0;return `<span class="rv-dim ${v&&v<3?"low":""}">${d} <b class="num">${v||"–"}</b></span>`}).join("")}</div></div>`:""}
-      ${r.signals?`<div class="ablock"><h2 class="h5">面试官反应信号</h2><div class="body">${nl2(r.signals)}</div></div>`:""}
-      ${r.summary?`<div class="ablock"><h2 class="h5">整体复盘</h2><div class="body">${nl2(r.summary)}</div></div>`:""}
-      ${r.nextAction?`<div class="ablock"><h2 class="h5">下一步动作</h2><div class="body">${nl2(r.nextAction)}</div></div>`:""}
-      <div class="ablock"><h2 class="h5">逐题记录（${(r.qs||[]).length}）</h2>
+    const fails=(r.qs||[]).flatMap(q=>q.fail||[]), lowN=(r.qs||[]).filter(q=>q.score&&q.score<=2).length;
+    return `<article class="rvc">
+      <header class="rvc-h">
+        <div><div class="rvc-t"><b>${esc(r.company)}</b><span>${esc(r.role)}</span></div>
+          <div class="rvc-f">${[esc(r.round),r.date&&esc(r.date),r.interviewer&&esc(r.interviewer),r.minutes&&r.minutes+" 分钟",(r.qs||[]).length+" 题"].filter(Boolean).join(" · ")}</div></div>
+        <div class="rvc-r">${r.result?`<span class="rvc-badge ${r.result==="过"?"ok":"bad"}">${esc(r.result)}</span>`:""}${avg?`<span class="rvc-avg" title="逐题自评均分"><b class="num">${avg.toFixed(1)}</b><i>/5</i></span>`:""}
+          <button class="btn sm ghost" onclick="openReview('${r.id}')">编辑</button></div>
+      </header>
+      ${r.radar?`<div class="rvc-dims">${RADAR_DIMS.map(d=>{const v=(r.radar||{})[d]||0;return `<span class="rv-dim ${v&&v<3?"low":""}">${d} <b class="num">${v||"–"}</b></span>`}).join("")}</div>`:""}
+      ${r.summary?`<p class="rvc-sum">${nl2(r.summary)}</p>`:""}
+      ${fails.length?`<div class="qj-risk rvc-fails">${[...new Set(fails)].slice(0,6).map(x=>`<span>${esc(x)}</span>`).join("")}</div>`:""}
+      ${r.nextAction?`<p class="rvc-next"><b>下一步</b>${esc(r.nextAction)}</p>`:""}
+      <details class="rvc-more"><summary>逐题记录（${(r.qs||[]).length}）${lowN?` · ${lowN} 题低分`:""}${r.signals?" · 面试官信号":""}</summary>
+        ${r.signals?`<div class="ablock"><h2 class="h5">面试官反应信号</h2><div class="body">${nl2(r.signals)}</div></div>`:""}
         ${(r.qs||[]).map(q=>`<div class="rq">
           <div class="rq-q">${esc(q.q)}<span class="rq-m">${[q.type&&esc(q.type),q.score&&`<b class="${q.score<3?"bad":""}">${q.score} / 5</b>`].filter(Boolean).join(" · ")}</span></div>
           ${(q.fail||[]).length?`<div class="rq-fail">失分：${q.fail.map(esc).join("、")}</div>`:""}
           ${q.my?`<div class="muted" style="margin-top:6px"><b>我答：</b>${esc(q.my)}</div>`:""}
-          ${q.fix?`<div style="margin-top:5px;color:var(--orange);font-size:13px"><b>下次改：</b>${esc(q.fix)}</div>`:""}
+          ${q.fix?`<div class="rq-fix"><b>下次改：</b>${esc(q.fix)}</div>`:""}
           <div class="rq-act"><button class="btn sm ghost" onclick="promoteToBank(${JSON.stringify(JSON.stringify(q.q))})">存入答案库</button></div>
-        </div>`).join("")}</div>
-    </div>`;}).join("")
+        </div>`).join("")}</details>
+      <footer class="rvc-act">${lowN?`<button class="btn sm" onclick="drillWeak()">针对低分题开 Mock</button>`:""}<button class="btn sm ghost" onclick="go('mock')">再练一轮</button></footer>
+    </article>`;}).join("")
    : '<div class="card"><div class="empty"><div class="ic">🗒️</div>还没有复盘。这是整套系统里最值钱的模块——面完 30 分钟内记下来。</div></div>';
 }
 function renderReviewAnalysis(){

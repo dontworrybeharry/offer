@@ -3715,6 +3715,11 @@ async function agLoadModels(){
         const r2=await ping(base+"/v1"); if(r2&&r2.status!==404){ res=r2; base+="/v1"; fixed=base; agSaveSetting("base",base); }
       }
       if(!res) throw new Error(`连不上 ${base}/chat/completions：检查接口地址（通常以 /v1 结尾，以服务商文档为准）和网络。`);
+      /* 小米 MiMo：按量付费（sk-）和套餐（tp-）用不同地址，401 时自动换另一个地址再试 */
+      if(!res.ok&&res.status===401&&/xiaomimimo\.com/.test(base)){
+        const alts=[/^tp-/i.test(key)?"https://token-plan-cn.xiaomimimo.com/v1":"https://api.xiaomimimo.com/v1","https://token-plan-cn.xiaomimimo.com/v1","https://api.xiaomimimo.com/v1"].filter((x,i,a2)=>a2.indexOf(x)===i&&x!==base);
+        for(const alt of alts){ const r2=await ping(alt); if(r2&&r2.ok){ res=r2; base=alt; fixed=alt; agSaveSetting("base",alt); break; } }
+      }
       if(!res.ok&&res.status===401&&/xiaomimimo\.com/.test(base)){
         const tp=/^tp-/i.test(key), onPlan=/token-plan/i.test(base);
         throw new Error(tp&&!onPlan?"这是 MiMo Token Plan 的 Key（tp- 开头），要配套用套餐自己的接口地址：在 platform.xiaomimimo.com → Token Plan → 套餐管理里复制 Base URL（形如 https://token-plan-xxx.xiaomimimo.com/v1）填到上面。"

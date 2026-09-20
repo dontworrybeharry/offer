@@ -1202,6 +1202,16 @@ h2.h5,h3.h5{font-size:12.5px;font-weight:600;color:var(--acc);margin-bottom:6px}
 .qz-prof-menu em{margin-left:auto;font-style:normal;font-size:12px;color:#2150D6}
 .qz-prof-menu hr{border:0;border-top:1px solid var(--bd);margin:4px 0}
 .qz-prof-menu .danger{color:#B42318}
+.cv-ov{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:1px;background:var(--bd);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin:0 0 22px}
+.cv-ov-i{display:flex;flex-direction:column;gap:3px;padding:14px 16px;background:#fff;color:inherit;text-decoration:none;transition:background .12s}
+a.cv-ov-i:hover{background:var(--bg-2)}
+.cv-ov-n{font-size:23px;font-weight:600;line-height:1.15;font-variant-numeric:tabular-nums;color:var(--t1)}
+.cv-ov-k{font-size:var(--fs-sm);color:var(--t2)}
+.cv-ov-s{font-style:normal;font-size:12px;color:var(--t4)}
+.cv-ov-i.is-zero .cv-ov-n{color:var(--t4)}
+.cv-ov-i.is-warn .cv-ov-n{color:var(--warn)}
+.cv-ov-i.is-done{cursor:default}
+.cv-ov-i.is-done .cv-ov-n{color:var(--ok)}
 .cv-review{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin:0 0 20px;padding:12px 14px;border:1px solid #F1E2C4;background:#FDF8EE;border-radius:8px}
 .cv-review p{margin:0;font-size:13.5px;color:var(--t1);max-width:72ch}
 .cv-review b{color:#8F5200}
@@ -1589,6 +1599,16 @@ function bulletHint(b){
   return `${caps.length?`<span class="muted">识别到：${caps.join("、")}</span>`:`<span class="muted">没识别到岗位能力关键词</span>`}${tips.map(x=>` <span class="tag t-orange">${x}</span>`).join("")}`;
 }
 function updateHints(){ document.querySelectorAll("[data-hint]").forEach(el=>{ const [ei,bi]=el.dataset.hint.split(":").map(Number); const b=((S.profile.exps[ei]||{}).bullets||[])[bi]; if(b) el.innerHTML=bulletHint(b); }); }
+/* 经历总览：先看每类有几段，再往下逐段展开 */
+function profOverview(p){
+  const ex=(p.exps||[]).filter(e=>e.org);
+  if(!ex.length) return "";
+  const cell=sec=>{ const l=ex.filter(e=>e.sec===sec), b=l.reduce((n,e)=>n+(e.bullets||[]).filter(x=>x.t).length,0);
+    return `<div class="cv-ov-i${l.length?"":" is-zero"}"><b class="cv-ov-n">${l.length}</b><span class="cv-ov-k">${sec}</span><em class="cv-ov-s">${b} 条要点</em></div>`; };
+  const core=ex.filter(e=>e.imp===3).length;
+  return `<section class="cv-ov" style="margin:10px 0 14px">${SEC_OPTS.map(cell).join("")}
+    <div class="cv-ov-i is-done"><b class="cv-ov-n">${core}</b><span class="cv-ov-k">核心经历</span><em class="cv-ov-s">重要度标为「核心」</em></div></section>`;
+}
 function renderProfile(){
   const p=S.profile;
   document.getElementById("profileHome").innerHTML=`
@@ -1623,6 +1643,7 @@ function renderProfile(){
     <div class="pagehead" style="margin-bottom:6px"><div><div class="sechead" style="margin:0">经历与要点</div>
       <p>每条要点写成「小标题：动作 + 方法 + 结果」。</p></div>
       <div style="display:flex;gap:8px"><button class="btn" onclick="openImport()">粘贴旧简历导入</button><button class="btn pri" onclick="addExp()">+ 新增经历</button></div></div>
+    ${profOverview(p)}
     ${(p.exps||[]).length?p.exps.map((e,i)=>(PE!==e.id&&e.org)?peRow(e):`<div class="rvx-exp rvx-expcard is-edit"><div class="pe-edit-h"><b>${e.org?esc(e.org):"新经历"}</b><button class="btn sm pri" onclick="PE='';renderProfile()">完成</button></div>
       <div class="rvx-grid3" style="grid-template-columns:.9fr 1.5fr 1.2fr 1fr .7fr auto;align-items:end;margin-top:8px">
         <div><label>板块</label><select class="inp" onchange="setP('exps.${i}.sec',this.value)">${SEC_OPTS.map(s=>`<option ${s===e.sec?"selected":""}>${s}</option>`).join("")}</select></div>
@@ -1783,7 +1804,6 @@ function loadSample(){
 /* ---------------- 启动 ---------------- */
 async function boot(){
   load(); buildNav(); go("dash");
-  render();
   document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeModal(); });
   document.getElementById("mask").addEventListener("click",e=>{ if(e.target.id==="mask") closeModal(); });
 }

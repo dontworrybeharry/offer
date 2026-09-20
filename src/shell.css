@@ -626,6 +626,16 @@ h2.h5,h3.h5{font-size:12.5px;font-weight:600;color:var(--acc);margin-bottom:6px}
 .qz-prof-menu em{margin-left:auto;font-style:normal;font-size:12px;color:#2150D6}
 .qz-prof-menu hr{border:0;border-top:1px solid var(--bd);margin:4px 0}
 .qz-prof-menu .danger{color:#B42318}
+.cv-ov{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:1px;background:var(--bd);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin:0 0 22px}
+.cv-ov-i{display:flex;flex-direction:column;gap:3px;padding:14px 16px;background:#fff;color:inherit;text-decoration:none;transition:background .12s}
+a.cv-ov-i:hover{background:var(--bg-2)}
+.cv-ov-n{font-size:23px;font-weight:600;line-height:1.15;font-variant-numeric:tabular-nums;color:var(--t1)}
+.cv-ov-k{font-size:var(--fs-sm);color:var(--t2)}
+.cv-ov-s{font-style:normal;font-size:12px;color:var(--t4)}
+.cv-ov-i.is-zero .cv-ov-n{color:var(--t4)}
+.cv-ov-i.is-warn .cv-ov-n{color:var(--warn)}
+.cv-ov-i.is-done{cursor:default}
+.cv-ov-i.is-done .cv-ov-n{color:var(--ok)}
 .cv-review{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin:0 0 20px;padding:12px 14px;border:1px solid #F1E2C4;background:#FDF8EE;border-radius:8px}
 .cv-review p{margin:0;font-size:13.5px;color:var(--t1);max-width:72ch}
 .cv-review b{color:#8F5200}

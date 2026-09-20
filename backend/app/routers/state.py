@@ -35,6 +35,6 @@ def export_state(db: DB, ws: WS):
     state = compose(db, ws)
     if state is None:
         raise HTTPException(404, "这个档案还没有数据")
-    name = f"秋招作战台备份_{ws}_{datetime.now():%Y-%m-%d}.json"
+    name = f"Offer_backup_{ws}_{datetime.now():%Y-%m-%d}.json"
     return Response(json.dumps(state, ensure_ascii=False, indent=1), media_type="application/json",
                     headers={"content-disposition": f"attachment; filename*=UTF-8''{__import__('urllib.parse').parse.quote(name)}"})

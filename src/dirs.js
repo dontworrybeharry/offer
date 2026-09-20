@@ -101,7 +101,7 @@ function qzDirChecksHTML(){
   const w=function(){ const r=orig.apply(this,arguments); const v=document.getElementById("v-abroad"); if(v){ let el=document.getElementById("dirChecks"); if(!el){ el=document.createElement("div"); el.id="dirChecks"; const ph=v.querySelector(".pagehead"); if(ph) ph.after(el); else v.prepend(el); } el.innerHTML=qzDirChecksHTML(); } return r; };
   w.__dir=true; window.renderAbroad=w;
 })();
-/* 通用版的匹配打分会调用它：纯技术研发岗对非技术背景直接压低分数（个人版有自己的判断，不受影响） */
+/* 匹配打分会调用它：纯技术研发岗对非技术背景直接压低分数 */
 window.qzTechnicalMismatch=window.qzTechnicalMismatch||function(role,jd){
   const r=String(role||"");
   const tech=/(开发|研发|算法|工程师|测试|架构|前端|后端|嵌入式|芯片|硬件|运维|Engineer|Developer|SDE)/i.test(r);

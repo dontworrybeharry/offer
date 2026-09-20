@@ -1324,7 +1324,7 @@ tr.is-on td{background:#FBFCFD}
 .dir-pick input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
 .tbl td .st{padding:0;border:0;margin:0}
 
-/* ---------- 通用版：我的经历（阅读 / 编辑） ---------- */
+/* ---------- 我的经历（阅读 / 编辑） ---------- */
 .pe-row{padding:16px 0;border-bottom:1px solid #EEF0F2}
 .pe-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
 .pe-h b{font-size:15px;font-weight:600}
@@ -1405,7 +1405,7 @@ tr.is-on td{background:#FBFCFD}
 
 /*@/QZ:shell.css*/
 /*@QZ:share/interview.css*/
-/* 面试模块（通用版）：只补通用版缺的基础样式，外观规则在 shell.css */
+/* 面试模块：只补本模块缺的基础样式，外观规则在 shell.css */
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
 .qa>.q{cursor:pointer;display:flex;gap:12px;align-items:flex-start;justify-content:space-between}
 .qa>.q .txt{flex:1;line-height:1.55}
@@ -1463,7 +1463,7 @@ tr.is-on td{background:#FBFCFD}
 <div class="toast" id="toast"></div>
 <script>
 /* =========================================================================
-   Offer · 通用版
+   Offer
    本地优先：所有数据只存在你自己的浏览器（localStorage），不上传任何服务器。
    ========================================================================= */
 /* 多档案：网址带 ?p=档案 id 时用独立的存储键（后端档案同名），互不影响 */
@@ -3473,7 +3473,7 @@ function agModel(p){ p=p||agProvider(); return (agCfg().models||{})[p]||AG_PROVI
 function agReady(){ const p=agProvider(); return !!agKey()&&(p!=="custom"||(!!agBase(p)&&!!agModel(p))); }
 function agPName(p){ return (AG_PROVIDERS[p]||{name:p||"AI"}).name; }
 
-/* ---------------- 平台数据读取（个人版与通用版的差异在这里抹平） ---------------- */
+/* ---------------- 个人档案与新建档案的读取差异在这里抹平 ---------------- */
 function agLib(){ return (typeof rvLib==="function"?rvLib():RV_LIB).filter(e=>!e.gate||(S.profile&&S.profile[e.gate])); }
 function agEdu(){ return typeof RV_EDU!=="undefined"?RV_EDU:(S.profile.edu||[]); }
 function agSkills(){ return typeof RV_SKILL!=="undefined"?RV_SKILL:(S.profile.skills||[]); }
@@ -3999,7 +3999,7 @@ async function agSyncExt(){
 function agExtHelp(){
   openModal("安装 Chrome 插件",`<div class="rvx-p">
     1. 在 Chrome 地址栏打开 <b>chrome://extensions</b>，右上角打开「开发者模式」。<br>
-    2. 点「加载已解压的扩展程序」，选择 <b>秋招作战台-通用版</b> 文件夹里的 <b>extension</b> 文件夹（两个版本共用这一个插件，里面没有个人信息）。<br>
+    2. 点「加载已解压的扩展程序」，选择 <b>Offer</b> 文件夹里的 <b>extension</b> 文件夹（个人版与 Offer 共用这一个插件，里面没有个人信息）。<br>
     3. 在插件「详情」里打开「允许访问文件网址」（本地双击打开平台时需要）。<br>
     4. 用 Chrome 打开平台并刷新，「自动投递」页会显示「Chrome 插件已连接」。<br><br>
     <b>插件要的权限</b>：读取和修改你打开的网站——用来在后台打开招聘网站读岗位、在网申页填表。它只在自动投递运行、或你点插件按钮时工作，数据只存在本机。<br>
@@ -4685,7 +4685,7 @@ function qzToday(){
   const live=apps.filter(a=>/笔试|测评|面/.test(a.stage||"")&&a.result!=="挂");
   const offer=apps.filter(a=>a.stage==="已发offer"||a.result==="offer");
   const ddl=apps.filter(a=>a.deadline&&a.deadline>=today&&a.stage==="想投/收藏").sort((a,b)=>a.deadline.localeCompare(b.deadline));
-  /* 经历：个人版看「待确认」，通用版看经历条数 */
+  /* 经历：内置个人档案看「待确认」，其他档案看经历条数 */
   const lib=(S.cv&&S.cv.lib)||((S.profile&&S.profile.exps)||[]).filter(e=>e.org);
   const todo=typeof cvTodo==="function"?lib.filter(e=>cvTodo(e).length).length:0;
   const q=s=>String(s).replace(/"/g,"&quot;");
@@ -4877,7 +4877,7 @@ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded"
 /* =========================================================================
    多档案（两个版本共用）
    · 每个人一个档案：独立的浏览器存储键 + 独立的后端档案（ws），互不影响
-   · 个人版的档案 = 内置个人数据的那一份；其他人的档案都用通用版（空白起步，自己导入经历）
+   · 个人档案 = 内置个人数据的那一份；新建档案从空白开始，可自行导入经历
    · 档案列表存在本机（offer_profiles）；用本机后端时，还会从后端读出已有档案，换浏览器也能看到
    ========================================================================= */
 const QZ_OWNER_KEY="hl_qiuzhao_v3", QZ_SHARE_KEY="qzzt_share_v1";
@@ -4888,8 +4888,8 @@ function qzProfList(){ try{ const l=JSON.parse(localStorage.getItem("offer_profi
 function qzProfPut(l){ try{ localStorage.setItem("offer_profiles",JSON.stringify(l)); }catch(e){} }
 function qzProfHref(id){
   const http=typeof QZ_BACKEND!=="undefined"&&QZ_BACKEND.online;   // 由本机后端提供页面时用 / 和 /share；否则用文件相对路径
-  if(id==="__owner") return http?"/":(qzIsOwner()?location.pathname:"../秋招作战台.html");
-  const base=http?"/share":(qzIsOwner()?"秋招作战台-通用版/index.html":location.pathname);
+  if(id==="__owner") return http?"/":(qzIsOwner()?location.pathname:"../秋招作战台.html"); // 兼容旁边保留的旧个人版
+  const base=http?"/share":(qzIsOwner()?"Offer/index.html":location.pathname);
   return base+(id&&id!=="__default"?"?p="+encodeURIComponent(id):"");
 }
 function qzProfName(){
@@ -5425,7 +5425,7 @@ function renderApps(){
 /*@QZ:share/interview.js*/
 
 /* =========================================================================
-   面试模块（通用版）：素材库 / 答案库 / 面试复盘 / Mock 面试
+   面试模块：素材库 / 答案库 / 面试复盘 / Mock 面试
    · 复盘、答案库、Mock 的逻辑与个人版一致（由 .qz-src/tools/gen_share_interview.py 从个人版生成，不要手改这一段）
    · 素材库按「我的经历」自动建卡，口播、追问和数字由你自己补；平台不替你编内容
    · 题库：公开面经题 + 各方向通用题，不写进你的档案（不占存储、导出时不带）
@@ -5972,7 +5972,7 @@ function delMock(id){ if(!confirm("删除这条 Mock 记录？")) return; S.mock
 
 
 
-/* ===================== 素材库（通用版） ===================== */
+/* ===================== 素材库 ===================== */
 let starTab={};
 function ivStory(e){
   S.star=S.star||[];
@@ -6244,7 +6244,7 @@ function qzDirChecksHTML(){
   const w=function(){ const r=orig.apply(this,arguments); const v=document.getElementById("v-abroad"); if(v){ let el=document.getElementById("dirChecks"); if(!el){ el=document.createElement("div"); el.id="dirChecks"; const ph=v.querySelector(".pagehead"); if(ph) ph.after(el); else v.prepend(el); } el.innerHTML=qzDirChecksHTML(); } return r; };
   w.__dir=true; window.renderAbroad=w;
 })();
-/* 通用版的匹配打分会调用它：纯技术研发岗对非技术背景直接压低分数（个人版有自己的判断，不受影响） */
+/* 匹配打分会调用它：纯技术研发岗对非技术背景直接压低分数 */
 window.qzTechnicalMismatch=window.qzTechnicalMismatch||function(role,jd){
   const r=String(role||"");
   const tech=/(开发|研发|算法|工程师|测试|架构|前端|后端|嵌入式|芯片|硬件|运维|Engineer|Developer|SDE)/i.test(r);

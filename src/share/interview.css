@@ -1,4 +1,4 @@
-/* 面试模块（通用版）：只补通用版缺的基础样式，外观规则在 shell.css */
+/* 面试模块：只补本模块缺的基础样式，外观规则在 shell.css */
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
 .qa>.q{cursor:pointer;display:flex;gap:12px;align-items:flex-start;justify-content:space-between}
 .qa>.q .txt{flex:1;line-height:1.55}

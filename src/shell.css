@@ -748,7 +748,7 @@ tr.is-on td{background:#FBFCFD}
 .dir-pick input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
 .tbl td .st{padding:0;border:0;margin:0}
 
-/* ---------- 通用版：我的经历（阅读 / 编辑） ---------- */
+/* ---------- 我的经历（阅读 / 编辑） ---------- */
 .pe-row{padding:16px 0;border-bottom:1px solid #EEF0F2}
 .pe-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
 .pe-h b{font-size:15px;font-weight:600}

@@ -5,7 +5,7 @@ from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BACKEND_DIR = Path(__file__).resolve().parent.parent
-WEB_ROOT = BACKEND_DIR.parent  # 秋招作战台-通用版/：index.html、sites.json、extension/
+WEB_ROOT = BACKEND_DIR.parent  # Offer/：index.html、sites.json、extension/
 
 
 class Settings(BaseSettings):

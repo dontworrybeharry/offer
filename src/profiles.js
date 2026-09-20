@@ -2,7 +2,7 @@
 /* =========================================================================
    多档案（两个版本共用）
    · 每个人一个档案：独立的浏览器存储键 + 独立的后端档案（ws），互不影响
-   · 个人版的档案 = 内置个人数据的那一份；其他人的档案都用通用版（空白起步，自己导入经历）
+   · 个人档案 = 内置个人数据的那一份；新建档案从空白开始，可自行导入经历
    · 档案列表存在本机（offer_profiles）；用本机后端时，还会从后端读出已有档案，换浏览器也能看到
    ========================================================================= */
 const QZ_OWNER_KEY="hl_qiuzhao_v3", QZ_SHARE_KEY="qzzt_share_v1";
@@ -13,8 +13,8 @@ function qzProfList(){ try{ const l=JSON.parse(localStorage.getItem("offer_profi
 function qzProfPut(l){ try{ localStorage.setItem("offer_profiles",JSON.stringify(l)); }catch(e){} }
 function qzProfHref(id){
   const http=typeof QZ_BACKEND!=="undefined"&&QZ_BACKEND.online;   // 由本机后端提供页面时用 / 和 /share；否则用文件相对路径
-  if(id==="__owner") return http?"/":(qzIsOwner()?location.pathname:"../秋招作战台.html");
-  const base=http?"/share":(qzIsOwner()?"秋招作战台-通用版/index.html":location.pathname);
+  if(id==="__owner") return http?"/":(qzIsOwner()?location.pathname:"../秋招作战台.html"); // 兼容旁边保留的旧个人版
+  const base=http?"/share":(qzIsOwner()?"Offer/index.html":location.pathname);
   return base+(id&&id!=="__default"?"?p="+encodeURIComponent(id):"");
 }
 function qzProfName(){

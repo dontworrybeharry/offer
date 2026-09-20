@@ -2,7 +2,7 @@
 
 设计：常用于查询、筛选的字段单独成列（带索引），完整对象放在 data（JSON）里，
 这样前端对象多加字段不需要改表，后端功能又能直接按列查询。
-所有表都带 ws（workspace）：个人版与通用版、或以后的多份档案互不干扰。
+所有表都带 ws（workspace）：个人档案与其他档案互不干扰。
 """
 from datetime import datetime, timezone
 

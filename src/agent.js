@@ -35,7 +35,7 @@ function agModel(p){ p=p||agProvider(); return (agCfg().models||{})[p]||AG_PROVI
 function agReady(){ const p=agProvider(); return !!agKey()&&(p!=="custom"||(!!agBase(p)&&!!agModel(p))); }
 function agPName(p){ return (AG_PROVIDERS[p]||{name:p||"AI"}).name; }
 
-/* ---------------- 平台数据读取（个人版与通用版的差异在这里抹平） ---------------- */
+/* ---------------- 个人档案与新建档案的读取差异在这里抹平 ---------------- */
 function agLib(){ return (typeof rvLib==="function"?rvLib():RV_LIB).filter(e=>!e.gate||(S.profile&&S.profile[e.gate])); }
 function agEdu(){ return typeof RV_EDU!=="undefined"?RV_EDU:(S.profile.edu||[]); }
 function agSkills(){ return typeof RV_SKILL!=="undefined"?RV_SKILL:(S.profile.skills||[]); }
@@ -561,7 +561,7 @@ async function agSyncExt(){
 function agExtHelp(){
   openModal("安装 Chrome 插件",`<div class="rvx-p">
     1. 在 Chrome 地址栏打开 <b>chrome://extensions</b>，右上角打开「开发者模式」。<br>
-    2. 点「加载已解压的扩展程序」，选择 <b>秋招作战台-通用版</b> 文件夹里的 <b>extension</b> 文件夹（两个版本共用这一个插件，里面没有个人信息）。<br>
+    2. 点「加载已解压的扩展程序」，选择 <b>Offer</b> 文件夹里的 <b>extension</b> 文件夹（个人版与 Offer 共用这一个插件，里面没有个人信息）。<br>
     3. 在插件「详情」里打开「允许访问文件网址」（本地双击打开平台时需要）。<br>
     4. 用 Chrome 打开平台并刷新，「自动投递」页会显示「Chrome 插件已连接」。<br><br>
     <b>插件要的权限</b>：读取和修改你打开的网站——用来在后台打开招聘网站读岗位、在网申页填表。它只在自动投递运行、或你点插件按钮时工作，数据只存在本机。<br>

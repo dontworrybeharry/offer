@@ -1,8 +1,8 @@
-# Offer · 校园招聘工作台
+# Offer · 求职工作台
 
 [![CI](https://github.com/dontworrybeharry/offer/actions/workflows/ci.yml/badge.svg)](https://github.com/dontworrybeharry/offer/actions/workflows/ci.yml)
 
-Offer 把校招求职的全流程放进一个本地优先的工作台：整理经历、发现岗位、按 JD 生成一页简历、跟踪投递进度、准备面试。数据默认只保存在你自己的设备上，投递始终由你本人确认提交。
+Offer 把求职全流程放进一个本地优先的工作台：整理经历、发现岗位、按 JD 生成一页简历、跟踪投递进度、准备面试。数据默认只保存在你自己的设备上，投递始终由你本人确认提交。
 
 ![今天](docs/screenshots/01-today.png)
 
@@ -122,7 +122,7 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
 
 ## 关于这个项目
 
-Offer 是我在 2026 年秋招期间为自己做的求职工具（2026.08 起），以 Vibe Coding 的方式完成：我负责产品定义、需求拆解、交互设计和逐项验收，与 AI 编程助手协作实现代码。
+Offer 是我从 2026 年开始为自己做的求职工具，以 Vibe Coding 的方式完成：我负责产品定义、需求拆解、交互设计和逐项验收，与 AI 编程助手协作实现代码。
 
 它解决的是我自己遇到的问题：岗位分散在几十个官网，每个 JD 都要改一版简历，投了哪些岗位、用的是哪一版简历记不清，面试准备练了也没有反馈。
 

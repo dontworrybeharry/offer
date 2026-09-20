@@ -142,7 +142,7 @@ function qzToday(){
   const live=apps.filter(a=>/笔试|测评|面/.test(a.stage||"")&&a.result!=="挂");
   const offer=apps.filter(a=>a.stage==="已发offer"||a.result==="offer");
   const ddl=apps.filter(a=>a.deadline&&a.deadline>=today&&a.stage==="想投/收藏").sort((a,b)=>a.deadline.localeCompare(b.deadline));
-  /* 经历：个人版看「待确认」，通用版看经历条数 */
+  /* 经历：内置个人档案看「待确认」，其他档案看经历条数 */
   const lib=(S.cv&&S.cv.lib)||((S.profile&&S.profile.exps)||[]).filter(e=>e.org);
   const todo=typeof cvTodo==="function"?lib.filter(e=>cvTodo(e).length).length:0;
   const q=s=>String(s).replace(/"/g,"&quot;");

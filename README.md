@@ -1,5 +1,7 @@
 # Offer · 校园招聘工作台
 
+[![CI](https://github.com/dontworrybeharry/offer/actions/workflows/ci.yml/badge.svg)](https://github.com/dontworrybeharry/offer/actions/workflows/ci.yml)
+
 Offer 把校招求职的全流程放进一个本地优先的工作台：整理经历、发现岗位、按 JD 生成一页简历、跟踪投递进度、准备面试。数据默认只保存在你自己的设备上，投递始终由你本人确认提交。
 
 ![今天](docs/screenshots/01-today.png)
@@ -84,15 +86,23 @@ docs/               ARCHITECTURE.md 架构说明 · DESIGN.md 设计规范 · sc
 
 ## 开发与测试
 
-前端：修改 `src/` 下的模块后运行 `python3 tools/build.py`，刷新页面即可。
+前端：修改 `src/` 下的模块后运行 `python3 tools/build.py`，刷新页面即可。提交前跑一次自检：
 
-后端：
+```bash
+pip install esprima && python3 tools/check.py
+```
+
+自检会验证：每个模块能正确解析、模块之间没有重名的顶层函数（重名会互相覆盖）、`index.html` 与 `src/` 一致、仓库里没有个人信息。
+
+后端（测试 · 代码风格 · 类型检查）：
 
 ```bash
 cd backend
 python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
-.venv/bin/python -m pytest -q
+.venv/bin/python -m pytest -q && .venv/bin/ruff check app tests && .venv/bin/mypy
 ```
+
+以上检查每次推送都会在 GitHub Actions 上自动跑一遍（`.github/workflows/ci.yml`）。
 
 更新招聘来源：编辑 `sites.json`（`co` 公司、`cat` 类别、`url` 列表页、`auto` 是否实测可自动收集），推送后使用者的来源库会在一天内自动更新。
 

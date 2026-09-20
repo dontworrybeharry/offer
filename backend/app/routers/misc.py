@@ -2,9 +2,9 @@
 import asyncio
 import json
 
-from pydantic import BaseModel, Field
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import StreamingResponse
+from pydantic import BaseModel, Field
 from sqlalchemy import select
 
 from .. import __version__

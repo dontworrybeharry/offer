@@ -1,4 +1,5 @@
-import copy
+
+import json
 
 import httpx
 import pytest
@@ -197,3 +198,34 @@ def test_direct_fetch_more_systems():
         assert fetchers.detect(url)[0] == kind, url
     for url in ("https://careers.trip.com/#/campus/job", "https://app.mokahr.com/campus_apply/high-flyer/4605", "https://career.huawei.com/"):
         assert fetchers.detect(url) is None, url
+
+
+def test_feishu_fetcher_parses_and_paginates():
+    """用假的网络响应验证飞书读取器：翻页、JD 拼接、岗位链接。不联网。"""
+    import asyncio
+
+    from app.services import fetchers
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path.endswith("/csrf/token"):
+            return httpx.Response(200, json={"code": 0, "data": {"token": "t0"}})
+        offset = json.loads(request.content)["offset"]
+        if offset:
+            return httpx.Response(200, json={"code": 0, "data": {"count": 2, "job_post_list": []}})
+        posts = [{"id": "77", "title": "用户运营实习生", "description": "负责活动策划", "requirement": "熟悉 Excel",
+                  "city_list": [{"name": "上海"}, {"name": "北京"}], "job_category": {"name": "运营"}},
+                 {"id": "78", "title": "数据分析实习生", "description": "<p>取数<br>建表</p>", "requirement": "会 SQL",
+                  "city_info": {"name": "深圳"}}]
+        return httpx.Response(200, json={"code": 0, "data": {"count": 2, "job_post_list": posts}})
+
+    async def run():
+        async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+            return await fetchers.fetch("https://demo.jobs.feishu.cn/campus", max_jobs=50, client=client)
+
+    r = asyncio.run(run())
+    assert r["kind"] == "feishu" and r["total"] == 2
+    first, second = r["jobs"]
+    assert first["title"] == "用户运营实习生" and first["city"] == "上海、北京"
+    assert first["url"] == "https://demo.jobs.feishu.cn/campus/position/77/detail"
+    assert "负责活动策划" in first["jd"] and "熟悉 Excel" in first["jd"]
+    assert "取数\n建表" in second["jd"] and second["city"] == "深圳"   # HTML 标签转成纯文本

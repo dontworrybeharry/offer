@@ -10,7 +10,7 @@ from fastapi import APIRouter, HTTPException, Query
 from sqlalchemy import func, or_, select
 
 from ..deps import DB, WS
-from ..models import Application, Job, ResumeVersion, Source
+from ..models import Application, Job, ListRow, ResumeVersion, Source
 from ..schemas import ItemList, ItemOut, ItemPatch, JobImportIn
 from ..services.events import broadcaster
 from ..services.state_sync import bump, get_workspace, row_fields
@@ -20,7 +20,7 @@ def _out(row: Any) -> ItemOut:
     return ItemOut(id=row.id, data=row.data)
 
 
-def make_router(model: type, path: str, tag: str, filters: dict[str, str], order: Any, search_cols: tuple[str, ...]) -> APIRouter:
+def make_router(model: type[ListRow], path: str, tag: str, filters: dict[str, str], order: Any, search_cols: tuple[str, ...]) -> APIRouter:
     router = APIRouter(prefix=path, tags=[tag])
 
     def commit(db: DB, ws: str) -> int:
@@ -54,7 +54,7 @@ def make_router(model: type, path: str, tag: str, filters: dict[str, str], order
 
     @router.get("/{item_id}", response_model=ItemOut, summary=f"读取一条{tag}")
     def get_item(item_id: str, db: DB, ws: WS):
-        row = db.get(model, (ws, item_id))
+        row = db.get(model, {"ws": ws, "id": item_id})
         if not row:
             raise HTTPException(404, "找不到这条记录")
         return _out(row)
@@ -65,7 +65,7 @@ def make_router(model: type, path: str, tag: str, filters: dict[str, str], order
         if not data.get("id"):
             import secrets
             data["id"] = path.strip("/")[:1] + secrets.token_hex(6)
-        if db.get(model, (ws, data["id"])):
+        if db.get(model, {"ws": ws, "id": data["id"]}):
             raise HTTPException(409, "id 已存在")
         get_workspace(db, ws)
         # 新条目排在最前（与前端「最新在前」一致）
@@ -77,7 +77,7 @@ def make_router(model: type, path: str, tag: str, filters: dict[str, str], order
 
     @router.patch("/{item_id}", response_model=ItemOut, summary=f"修改{tag}（合并字段）")
     def patch_item(item_id: str, body: ItemPatch, db: DB, ws: WS):
-        row = db.get(model, (ws, item_id))
+        row = db.get(model, {"ws": ws, "id": item_id})
         if not row:
             raise HTTPException(404, "找不到这条记录")
         data = {**row.data, **body.data, "id": item_id}
@@ -89,7 +89,7 @@ def make_router(model: type, path: str, tag: str, filters: dict[str, str], order
 
     @router.delete("/{item_id}", status_code=204, summary=f"删除{tag}")
     def delete_item(item_id: str, db: DB, ws: WS):
-        row = db.get(model, (ws, item_id))
+        row = db.get(model, {"ws": ws, "id": item_id})
         if not row:
             raise HTTPException(404, "找不到这条记录")
         db.delete(row)
@@ -123,12 +123,12 @@ def import_jobs(body: JobImportIn, db: DB, ws: WS):
             continue
         import secrets
         oid = str(data.get("id") or "j" + secrets.token_hex(8))[:64]
-        while db.get(Job, (ws, oid)):
+        while db.get(Job, {"ws": ws, "id": oid}):
             oid = "j" + secrets.token_hex(8)
         data["id"] = oid
         row = Job(ws=ws, id=oid, pos=pos, data=data, **row_fields(Job, data))
         db.add(row); added.append(row); pos -= 1
-        keys.add((company, role));
+        keys.add((company, role))
         if url: urls.add(url)
     v = bump(db, ws); db.commit()
     broadcaster.publish(ws, {"type": "state", "version": v, "resource": "jobs", "imported": len(added)})

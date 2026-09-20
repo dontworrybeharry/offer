@@ -10,16 +10,17 @@
 """
 from __future__ import annotations
 
+from collections.abc import Sequence
 from datetime import datetime, timezone
 from typing import Any
 
 from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 
-from ..models import Application, Document, Job, ResumeVersion, Source, Workspace
+from ..models import Application, Document, Job, ListRow, ResumeVersion, Source, Workspace, WsRow
 
-LIST_TABLES = {"apps": Application, "resumeHist": ResumeVersion}
-AUTOPILOT_LISTS = {"queue": Job, "sources": Source}
+LIST_TABLES: dict[str, type[ListRow]] = {"apps": Application, "resumeHist": ResumeVersion}
+AUTOPILOT_LISTS: dict[str, type[ListRow]] = {"queue": Job, "sources": Source}
 
 
 class VersionConflict(Exception):
@@ -76,15 +77,16 @@ def bump(db: Session, ws: str) -> int:
     return w.version
 
 
-def _rows(db: Session, model: type, ws: str) -> list[dict]:
-    rows = db.scalars(select(model).where(model.ws == ws).order_by(model.pos)).all()
+def _rows(db: Session, model: type[ListRow], ws: str) -> list[dict]:
+    rows: Sequence[ListRow] = db.scalars(select(model).where(model.ws == ws).order_by(model.pos)).all()
     return [r.data for r in rows]
 
 
 def compose(db: Session, ws: str) -> dict | None:
     """数据表 -> 前端状态对象。没有任何数据时返回 None。"""
-    docs = {d.key: d.data for d in db.scalars(select(Document).where(Document.ws == ws)).all()}
+    docs: dict[str, Any] = {d.key: d.data for d in db.scalars(select(Document).where(Document.ws == ws)).all()}
     order = docs.pop("__order__", None)
+    order = order if isinstance(order, list) else None
     if not docs and order is None:
         return None
     state: dict[str, Any] = {}
@@ -112,7 +114,8 @@ def compose(db: Session, ws: str) -> dict | None:
 
 def decompose(db: Session, ws: str, state: dict) -> None:
     """前端状态对象 -> 数据表（整份替换该 workspace 的数据）。"""
-    for model in (Document, Application, Job, Source, ResumeVersion):
+    tables: tuple[type[WsRow], ...] = (Document, Application, Job, Source, ResumeVersion)
+    for model in tables:
         db.execute(delete(model).where(model.ws == ws))
     db.add(Document(ws=ws, key="__order__", data=list(state.keys())))
     for key, value in state.items():
@@ -129,7 +132,7 @@ def decompose(db: Session, ws: str, state: dict) -> None:
             db.add(Document(ws=ws, key=key, data=value))
 
 
-def _insert_list(db: Session, model: type, ws: str, items: list) -> None:
+def _insert_list(db: Session, model: type[ListRow], ws: str, items: list) -> None:
     seen: set[str] = set()
     for pos, obj in enumerate(items):
         if not isinstance(obj, dict):

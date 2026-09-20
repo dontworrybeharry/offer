@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import json
 from collections import defaultdict
 from typing import Any
@@ -35,10 +36,8 @@ class Broadcaster:
 
     @staticmethod
     def _put(q: asyncio.Queue[str], msg: str) -> None:
-        try:
+        with contextlib.suppress(asyncio.QueueFull):   # 队列满说明这个窗口跟不上，丢掉这条事件即可
             q.put_nowait(msg)
-        except asyncio.QueueFull:
-            pass
 
     def count(self, ws: str) -> int:
         return len(self._subs.get(ws, ()))

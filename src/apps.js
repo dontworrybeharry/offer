@@ -170,7 +170,7 @@ function renderApps(){
   list=list.slice().sort((a,b)=>{ const r={active:0,wish:1,offer:2,fail:3,quit:4}; return (r[apOutcome(a)]-r[apOutcome(b)])||String(apLastAt(b)).localeCompare(String(apLastAt(a))); });
   const sent=cur.filter(a=>apOutcome(a)!=="wish").length, intv=by("active").filter(a=>!["已投递","笔试/测评"].includes(a.stage)).length;
   const facts=document.getElementById("apFacts");
-  if(facts) facts.textContent=cur.length?`本季 ${cur.length} 个岗位：已投 ${sent} 个，面试中 ${intv} 个，Offer ${by("offer").length} 个，未通过 ${by("fail").length} 个。每一轮出结果后点「通过」或「未通过」，阶段会自动往下走。`:"本季还没有投递记录。";
+  if(facts) facts.textContent=cur.length?`本季 ${cur.length} 个岗位：已投 ${sent} 个，面试中 ${intv} 个，Offer ${by("offer").length} 个，未通过 ${by("fail").length} 个。每一轮出结果后点「通过」或「未通过」，阶段会自动往下走。`:`本季（2026 秋招）还没有投递记录${past.length?`；2024–2025 年投实习的 ${past.length} 条在「往期实习」里`:""}。`;
   // 漏斗条：各阶段占比，一眼看出卡在哪
   const seg=[["wish","想投",by("wish").length],["sent","已投递 / 笔试",by("active").filter(a=>["已投递","笔试/测评"].includes(a.stage)).length],["intv","面试中",intv],["offer","Offer",by("offer").length],["fail","已结束",by("fail").length+by("quit").length]];
   const tot=seg.reduce((n,s)=>n+s[2],0)||1;

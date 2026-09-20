@@ -16,6 +16,20 @@ def utcnow() -> datetime:
     return datetime.now(timezone.utc)
 
 
+class WsRow(Base):
+    """所有按档案（workspace）隔离的表的公共部分。"""
+    __abstract__ = True
+    ws: Mapped[str] = mapped_column(String(64), primary_key=True)
+
+
+class ListRow(WsRow):
+    """前端的一个列表项（投递、岗位、来源、简历版本）：列用于查询，完整对象放 data。"""
+    __abstract__ = True
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    pos: Mapped[int] = mapped_column(Integer, default=0)
+    data: Mapped[dict] = mapped_column(JSON, default=dict)
+
+
 class Workspace(Base):
     """一份档案。version 每次写入 +1，用于多窗口乐观并发与实时同步。"""
     __tablename__ = "workspaces"
@@ -24,21 +38,17 @@ class Workspace(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
 
-class Document(Base):
+class Document(WsRow):
     """状态里没有单独建表的部分（经历档案、复盘、题库、设置等），按顶层键存。"""
     __tablename__ = "documents"
-    ws: Mapped[str] = mapped_column(String(64), primary_key=True)
     key: Mapped[str] = mapped_column(String(64), primary_key=True)
     data: Mapped[object] = mapped_column(JSON)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
 
 
-class Application(Base):
+class Application(ListRow):
     """投递看板里的一条岗位。"""
     __tablename__ = "applications"
-    ws: Mapped[str] = mapped_column(String(64), primary_key=True)
-    id: Mapped[str] = mapped_column(String(64), primary_key=True)
-    pos: Mapped[int] = mapped_column(Integer, default=0)
     company: Mapped[str] = mapped_column(String(200), default="", index=True)
     role: Mapped[str] = mapped_column(String(300), default="")
     stage: Mapped[str] = mapped_column(String(40), default="", index=True)
@@ -46,16 +56,12 @@ class Application(Base):
     applied_on: Mapped[str] = mapped_column(String(10), default="", index=True)
     deadline: Mapped[str] = mapped_column(String(10), default="", index=True)
     url: Mapped[str] = mapped_column(Text, default="")
-    data: Mapped[dict] = mapped_column(JSON, default=dict)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
 
 
-class Job(Base):
+class Job(ListRow):
     """职位雷达 / 自动投递发现的岗位。"""
     __tablename__ = "jobs"
-    ws: Mapped[str] = mapped_column(String(64), primary_key=True)
-    id: Mapped[str] = mapped_column(String(64), primary_key=True)
-    pos: Mapped[int] = mapped_column(Integer, default=0)
     company: Mapped[str] = mapped_column(String(200), default="", index=True)
     role: Mapped[str] = mapped_column(String(300), default="")
     city: Mapped[str] = mapped_column(String(60), default="")
@@ -63,34 +69,25 @@ class Job(Base):
     status: Mapped[str] = mapped_column(String(20), default="", index=True)
     score: Mapped[float | None] = mapped_column(Float, nullable=True, index=True)
     found_at: Mapped[str] = mapped_column(String(40), default="", index=True)
-    data: Mapped[dict] = mapped_column(JSON, default=dict)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
 
 
-class Source(Base):
+class Source(ListRow):
     """被监控的公司岗位列表页。"""
     __tablename__ = "sources"
-    ws: Mapped[str] = mapped_column(String(64), primary_key=True)
-    id: Mapped[str] = mapped_column(String(64), primary_key=True)
-    pos: Mapped[int] = mapped_column(Integer, default=0)
     company: Mapped[str] = mapped_column(String(200), default="", index=True)
     url: Mapped[str] = mapped_column(Text, default="")
     enabled: Mapped[bool] = mapped_column(Boolean, default=True)
     last_scanned: Mapped[str] = mapped_column(String(40), default="")
-    data: Mapped[dict] = mapped_column(JSON, default=dict)
 
 
-class ResumeVersion(Base):
+class ResumeVersion(ListRow):
     """历史简历（每次生成 / 修改存一版）。"""
     __tablename__ = "resume_versions"
-    ws: Mapped[str] = mapped_column(String(64), primary_key=True)
-    id: Mapped[str] = mapped_column(String(64), primary_key=True)
-    pos: Mapped[int] = mapped_column(Integer, default=0)
     company: Mapped[str] = mapped_column(String(200), default="", index=True)
     role: Mapped[str] = mapped_column(String(300), default="")
     app_id: Mapped[str] = mapped_column(String(64), default="", index=True)
     saved_at: Mapped[str] = mapped_column(String(40), default="")
-    data: Mapped[dict] = mapped_column(JSON, default=dict)
 
 
 class Secret(Base):
